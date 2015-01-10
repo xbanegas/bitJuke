@@ -21,11 +21,8 @@
     "express": "^4.10.7",
     "querystring": "^0.2.0",
     "request": "^2.51.0",
-<<<<<<< HEAD
     "socket.io": "^1.2.1",
-    "mopidy": "^0.4.1"
-=======
+    "mopidy": "^0.4.1",
     "socket.io": "^1.2.1"
->>>>>>> b23e24b9d80088ea7b577a6bb007675b085035a5
   }
 }
