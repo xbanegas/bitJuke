@@ -1,2 +1,121 @@
 /* CSS crunched with Crunch - http://crunchapp.net/ */
-.fontLight{font-family:"open-sans-condensed";font-weight:300;font-style:normal}.fontItalic{font-family:"open-sans-condensed";font-weight:300;font-style:italic}.fontBold{font-family:"open-sans-condensed";font-weight:700;font-style:normal}html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}.welcomeTitle{width:100%;height:40px;margin:auto;margin-top:40px;font-family:"open-sans-condensed";font-weight:300;font-style:normal;font-size:35px;color:#fff;text-shadow:1px 0 6px #d5f70f}
+/*Constants*/
+/*Colors*/
+/*Fonts*/
+.fontLight {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+.fontItalic {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+.fontBold {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+/*Body Styles*/
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url(images/background@2x.png);
+  bacgroud-position: center;
+  background-repeat: none;
+  background-size: 1208px 719px;
+}
+h1 {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 120px;
+  text-shadow: 5px 0px 0px #88a198;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 5px;
+}
+h2 {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 80px;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 3px;
+}
+h3 {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 20px;
+  text-align: center;
+  color: #ffffff;
+}
+.border {
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+}
+/*Index Page*/
+.welcomeTitle {
+  width: 100%;
+  height: 80px;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: 0px;
+  text-shadow: 0.2px 0px 1px #d5f70f;
+  position: relative;
+}
+.mainTitle {
+  width: 100%;
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  position: relative;
+}
+.subtitle {
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  width: 100%;
+  height: 20px;
+  text-shadow: none;
+  margin-top: 40px;
+  position: relative;
+}
+.search {
+  width: 650px;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  position: relative;
+}
+.search input[type="text"] {
+  display: block;
+  margin: 0;
+  width: 650px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 35px;
+  appearance: none;
+  box-shadow: none;
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  text-align: center;
+  background: #ffffff;
+  opacity: 0.56;
+}
+.search input[type="text"]:focus {
+  outline: none;
+}

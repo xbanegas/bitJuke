@@ -6,10 +6,11 @@
   @grey: #555e5d;
   @red: #fd4f57;
   @yellow: #d5f70f;
+  @mint: #88a198;
 
   /*Fonts*/
 
-  @font:"open-sans-condensed";
+  @font:'Open Sans Condensed', sans-serif;
 
   .fontLight {
     font-family: @font;
@@ -30,38 +31,103 @@
   }
 
 
-/*Document Resets*/
+/*Body Styles*/
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+body {
   margin: 0;
   padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+  background-image: url(images/background@2x.png);
+  bacgroud-position: center;
+  background-repeat: none;
+  background-size: 1208px 719px;
+}
+
+h1 {
+  .fontBold;
+  font-size: 120px;
+  text-shadow: 5px 0px 0px @mint;
+  text-align: center;
+  color: @white;
+  letter-spacing: 5px;
+}
+h2 {
+  .fontLight;
+  font-size: 80px;
+  text-align: center;
+  color: @white;
+  letter-spacing: 3px;
+}
+
+h3 {
+  .fontBold;
+  font-size: 20px;
+  text-align: center;
+  color: @white;
+}
+
+.border {
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
 }
 
 /*Index Page*/
 
 .welcomeTitle {
   width: 100%;
-  height: 40px;
+  height: 80px;
   margin: auto;
   margin-top: 40px;
+  margin-bottom: 0px;
+  text-shadow: .2px 0px 1px @yellow;
+  position: relative;
+
+}
+
+.mainTitle {
+  width: 100%;
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  position: relative;
+  }
+
+.subtitle {
+  .mainTitle;
+  width: 100%;
+  height: 20px;
+  text-shadow: none;
+  margin-top:40px;
+  position: relative;
+
+}
+
+.search {
+  width: 650px;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  position: relative;
+}
+
+.search input[type="text"] {
+  display: block;
+  margin: 0;
+  width: 650px;
   .fontLight;
   font-size: 35px;
-  color: @white;
-  text-shadow: 1px 0px 6px @yellow;
+  appearance: none;
+  box-shadow: none;
+  .border;
+  text-align: center;
+  background: @white;
+  opacity: 0.56;
+
+}
+.search input[type="text"]:focus {
+  outline: none;
 }
