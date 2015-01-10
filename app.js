@@ -14,8 +14,8 @@ var cookieParser = require('cookie-parser');
 var Mopidy = require('mopidy');
 
 
-var client_id = '03ffe0cac0a0401aa6673c3cf6d02ced'; // Your client id
-var client_secret = 'a57c43efb9644574a96d6623fb8bfbc2'; // Your client secret
+var client_id = '0ac7bdea5e14428c9884c3c933a304bd'; // Your client id
+var client_secret = '5e313bf5c84c478597175653cf557a9e'; // Your client secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 /**
@@ -38,7 +38,7 @@ var stateKey = 'spotify_auth_state';
 
 var mopidy = new Mopidy({
   webSocketUrl: "ws://172.16.2.65:6680/mopidy/ws/"
-})
+});
 
 var app = express();
 
@@ -51,7 +51,7 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email';
+  var scope = 'user-read-private user-read-email playlist-modify playlist-modify-private';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',

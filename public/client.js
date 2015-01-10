@@ -61,5 +61,8 @@
         });
       });
     }, false);
-  }
+
+
+
+  } /* end of else statement */
 })();
