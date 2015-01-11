@@ -11,12 +11,23 @@
 
     <!--Trianglify Background-->
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <!--<script src="trianglify.js"></script>
+
+    <!--FORM TEXT REPLACE-->
     <script>
-    var t = new Trianglify();
-    var pattern = t.generate(document.body.clientWidth, height());
-      document.body.setAttribute('style', 'background-image: '+pattern.dataUrl);
-    </script>-->
+    function MM_setTextOfTextfield(objId,x,newText,valor) { //v9.0
+      with (document){ if (getElementById){
+        var obj = getElementById(objId);} if (obj.value == valor) obj.value = newText;
+      }
+    }
+
+    function MM_setTextOfTextfieldEmpty(objId,x,newText) { //v9.0
+      with (document){ if (getElementById){
+        var obj = getElementById(objId);} if (obj.value.length < 1) obj.value = newText;
+        //alert (obj.value.length);
+      }
+    }
+    </script>
+
 
     <style type="text/css">
     #login, #loggedin {
@@ -31,12 +42,14 @@
     </style>
 
     <!--For Retina-->
+
     <script>
     if((window.devicePixelRatio===undefined?1:window.devicePixelRatio)>1)
       document.cookie='HTTP_IS_RETINA=1;path=/';
     </script>
 
     <!--Fonts-->
+
     <script type="text/javascript">
     WebFontConfig = {
       google: { families: [ 'Open+Sans+Condensed:300,300italic,700:latin' ] }
@@ -69,14 +82,20 @@
 
     <!-- Search and Results -->
 
-    <form class="search">
-      <input type="text" VALUE="search for an artist, song or album">
-      <button>Search</button>
-    </form>
+    <div class="searchContainer">
 
-    <div class="results">
+      <form class="search">
+        <input type="text" name="search" id="search" value="search for an artist, song or album"
+        onfocus="MM_setTextOfTextfield('search','','','search for an artist, song or album')"
+        onblur="MM_setTextOfTextfieldEmpty('search','','search for an artist, song or album')">
+        </input>
+        <input type="submit" id="magGlass" value=""></input>
+      </form>
+  </div>
+
+    <!--<div class="results">
       <h2>Results</h2>
-    </div>
+    </div>-->
 
     <script id="results-template" type="text/x-handlebars-template">
       {{#each tracks.items}}
@@ -85,9 +104,9 @@
     </script>
 
     <!-- Queue -->
-    <div class="queue">
+    <!--<div class="queue">
       <h2>Queue</h2>
-    </div>
+    </div>-->
 
     <script id="queue-template" type="text/x-handlebars-template">
     </script>
@@ -100,8 +119,22 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="client.js"></script>
+    <!--<script src="client.js"></script>-->
     <script src="trianglify.js"></script>
+
+
+
+    <script>
+    var t = new Trianglify({cellsize: 180, cellpadding: 5, noiseIntensity: 0.8,
+      fillOpacity: 0.4, strokeOpacity: 0.0});
+    console.log(t);
+
+    var pattern = t.generate(document.body.clientWidth, document.body.clientHeight);
+
+    document.body.setAttribute('style', 'background-image: '+pattern.dataUrl);
+
+    </script>
+
 
     </body>
 </html>
