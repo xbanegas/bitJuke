@@ -1,0 +1,419 @@
+/* CSS crunched with Crunch - http://crunchapp.net/ */
+/*Constants*/
+/*Colors*/
+/*Fonts*/
+.fontLight {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+.fontItalic {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+.fontBold {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+/*Body Styles*/
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+h1 {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 120px;
+  text-shadow: 5px 0px 0px #88a198;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 5px;
+}
+h2 {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 80px;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 3px;
+}
+h3 {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 30px;
+  text-align: center;
+  color: #88a198;
+}
+h4 {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 18px;
+  text-align: center;
+  color: #88a198;
+  letter-spacing: 3px;
+  line-height: 24px;
+}
+p {
+  padding-top: 15px;
+}
+.border {
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+}
+/*Index Page*/
+/*Headers*/
+.welcomeTitle {
+  width: 100%;
+  height: 80px;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: 0px;
+  text-shadow: 0.2px 0px 1px #d5f70f;
+  position: relative;
+}
+.mainTitle {
+  width: 100%;
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  position: relative;
+}
+.subtitle {
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  width: 100%;
+  height: 40px;
+  text-shadow: none;
+  margin-top: 25px;
+  position: relative;
+}
+/*Search*/
+.searchContainer {
+  width: 100%;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+.search {
+  width: 650px;
+  height: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  position: relative;
+}
+.search input[type="text"] {
+  display: block;
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 500px;
+  height: 60px;
+  padding-left: 20px;
+  padding-right: 10px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 30px;
+  appearance: none;
+  box-shadow: none;
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 0.47);
+  color: #88a198;
+}
+.search input[type="text"]:focus {
+  outline: none;
+}
+input#magGlass {
+  width: 43px;
+  height: 43px;
+  position: relative;
+  float: right;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-image: url(/images/magGlass@2x.png);
+  background-size: 43px 43px;
+  background-color: transparent;
+  border: 0;
+  border-color: transparent;
+  overflow: hidden;
+  top: -50px;
+  left: -90px;
+}
+/*Donation Total Area*/
+.donationContainer {
+  width: 600px;
+  height: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  position: relative;
+}
+.donationAmount {
+  width: 600px;
+  height: 25px;
+  position: relative;
+  float: left;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  color: #ffffff;
+  font-size: 22px;
+  text-align: center;
+  text-shadow: 0.2px 0px 1px #88a198;
+}
+.donationOrganizations {
+  width: 600px;
+  min-height: 300px;
+  position: relative;
+  float: left;
+  margin-top: 10px;
+}
+/*Search Results*/
+/*Search Bar - Enlarged*/
+.searchBig {
+  width: 650px;
+  height: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  position: relative;
+  width: 700px;
+  height: 70px;
+  margin-bottom: 0px;
+}
+.searchBig input[type="text"] {
+  display: block;
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0px;
+  width: 700px;
+  height: 70px;
+  vertical-align: top;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 45px;
+  appearance: none;
+  box-shadow: none;
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.47);
+  color: #555e5d;
+}
+.searchBig input[type="text"]:focus {
+  outline: none;
+}
+input#magGlassTwo {
+  width: 43px;
+  height: 43px;
+  position: relative;
+  float: right;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-image: url(/images/magGlass@2x.png);
+  background-size: 43px 43px;
+  background-color: transparent;
+  border: 0;
+  border-color: transparent;
+  overflow: hidden;
+  top: -55px;
+  left: -15px;
+}
+/*Results List*/
+.results {
+  width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 60px;
+  height: 350px;
+  position: relative;
+  top: -5px;
+}
+.resultsCategories {
+  width: 100%;
+  padding-left: 70px;
+  height: 45px;
+  background-color: rgba(255, 255, 255, 0.47);
+  margin-top: 5px;
+  color: #555e5d;
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  position: relative;
+  float: left;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 30px;
+  text-align: center;
+  text-decoration: underline;
+}
+.resultsColumns {
+  width: 140px;
+  height: 100%;
+  position: relative;
+  float: left;
+  margin-right: 5px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+.resultsRow {
+  width: 100%;
+  height: 70px;
+  position: relative;
+  float: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 20px;
+  text-align: center;
+  color: #555e5d;
+}
+#firstRow {
+  margin-top: 30px;
+}
+.resultsAlbum {
+  width: 70px;
+  height: 100%;
+  position: relative;
+  float: left;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.albumArtwork {
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
+  background-image: url(/images/chromesparksGoddess@2x.png);
+  background-size: 65px 65px;
+}
+.add {
+  width: 40px;
+  height: 40px;
+  background-position: center;
+  margin-left: 40px;
+  margin-top: 10px;
+  background-image: url(/images/add@2x.png);
+  background-size: 40px 40px;
+}
+.check {
+  width: 40px;
+  height: 40px;
+  background-position: center;
+  margin-left: 40px;
+  margin-top: 10px;
+  background-image: url(/images/add@2x.png);
+  background-size: 40px 40px;
+  background-image: url(/images/check@2x.png);
+}
+/*Queue*/
+.queue {
+  width: 700px;
+  height: 250px;
+  position: relative;
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.queueHeader {
+  width: 400px;
+  height: 45px;
+  background-color: rgba(255, 255, 255, 0.47);
+  color: #555e5d;
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 30px;
+  text-align: center;
+}
+.queueRow {
+  width: 100%;
+  height: 190px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+.queueColumn {
+  width: 130px;
+  height: 180px;
+  padding-top: 3px;
+  position: relative;
+  float: left;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.playing {
+  width: 100px;
+  height: 20px;
+  left: -10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  color: #fd4f57;
+  font-size: 20px;
+  position: relative;
+  float: left;
+  text-align: center;
+}
+.queueArtwork {
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
+  background-image: url(/images/chromesparksGoddess@2x.png);
+  background-size: 65px 65px;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  float: left;
+}
+.queueInfo {
+  width: 80px;
+  height: 40px;
+  margin-top: 5px;
+  position: relative;
+  float: left;
+  text-align: center;
+  font-size: 15px;
+  color: #555e5d;
+  line-height: 16px;
+  left: -10px;
+}

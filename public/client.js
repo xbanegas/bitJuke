@@ -41,10 +41,10 @@
       console.log(input_address + 'bitcoin uri...');
     });
     socket.on('payment_info', function(payment_info){
-      var google_api = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=';
+      var google_api = 'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=';
       var input_address = payment_info.input_address;
       var input_uri = payment_info.input_uri;
-      $('#bid').append('<iframe width="300" height="300" src="' + google_api + input_uri + '"></iframe>');
+      $('#bid').append('<div class="container" style="margin-top:15px;"><iframe width="150" height="150" src="' + google_api + input_uri + '"></iframe></div>');
       $('#bid').append('<a href="' + input_uri + '">click to donate: ' + input_address +'</a>');
 
       // fb_queue.push({song_uri: song_uri, input_address: input_address});
