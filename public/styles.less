@@ -74,79 +74,96 @@ h3 {
 
 /*Index Page*/
 
-.welcomeTitle {
-  width: 100%;
-  height: 80px;
-  margin: auto;
-  margin-top: 40px;
-  margin-bottom: 0px;
-  text-shadow: .2px 0px 1px @yellow;
-  position: relative;
+  /*Headers*/
 
-}
+  .welcomeTitle {
+    width: 100%;
+    height: 80px;
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 0px;
+    text-shadow: .2px 0px 1px @yellow;
+    position: relative;
 
-.mainTitle {
-  width: 100%;
-  height: 120px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5px;
-  margin-bottom: 0px;
-  position: relative;
   }
 
-.subtitle {
-  .mainTitle;
-  width: 100%;
-  height: 20px;
-  text-shadow: none;
-  margin-top:40px;
-  position: relative;
+  .mainTitle {
+    width: 100%;
+    height: 120px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    position: relative;
+    }
 
-}
+  .subtitle {
+    .mainTitle;
+    width: 100%;
+    height: 20px;
+    text-shadow: none;
+    margin-top:40px;
+    position: relative;
 
-.searchContainer {
-  width: 100%;
-  height: 50px;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-}
+  }
 
-.search {
-  width: 650px;
-  height: 50px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
-  position: relative;
-}
+  /*Search*/
 
-.search input[type="text"] {
-  display: block;
-  margin: 0;
-  width: 650px;
-  .fontLight;
-  font-size: 35px;
-  appearance: none;
-  box-shadow: none;
-  .border;
-  text-align: center;
-  background: @white;
-  opacity: 0.56;
+  .searchContainer {
+    width: 100%;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
 
-}
-.search input[type="text"]:focus {
-  outline: none;
-}
+  .search {
+    width: 650px;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    position: relative;
+  }
 
-input#magGlass {
-  width: 43px;
-  height: 43px;
-  position: relative;
-  cursor: pointer;
-  background-repeat: no-repeat;
-  background-image: url(/images/magGlass@2x.png);
-  background-size: 43px 43px;
-  border:none;
-}
+  .search input[type="text"] {
+    display: block;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    padding-left: 20px;
+    padding-right: 10px;
+    .fontLight;
+    font-size: 35px;
+    appearance: none;
+    box-shadow: none;
+    .border;
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.47);
+    color: @mint;
+
+  }
+  .search input[type="text"]:focus {
+    outline: none;
+  }
+
+  input#magGlass {
+    width: 43px;
+    height: 43px;
+    position: relative;
+    float: right;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-image: url(/images/magGlass@2x.png);
+    background-size: 43px 43px;
+    background-color: transparent;
+    border:0;
+    border-color:transparent;
+    overflow: hidden;
+    top:-47px;
+    left: -90px;
+  }
+
+  /*Donation Total Area*/
+  
