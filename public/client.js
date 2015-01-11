@@ -21,5 +21,8 @@
           socket.emit('song_requested', {});
       });
     });
+    socket.on('dest_address', function(dest_address){
+      console.log(dest_address);
+    });
 
 })();

@@ -52,31 +52,36 @@ io.on('connection', function (socket){
     });
   });
 
-
+  var str = '';
   socket.on('song_requested', function(){
+    var socket_id = socket.id;
     var options = {
       host: 'blockchain.info',
       path: '/api/receive?method=create&address=' + btc_address + '&callback=' + encodeURIComponent(redirect_uri)
     };
     console.log(options.host + options.path);
+    
     var req = https.get(options, function(res) {
       console.log('new address request');
       console.log("statusCode: ", res.statusCode);
       console.log("headers: ", res.headers);
-      var str = '';
       res.on('data', function (chunk) {
         str += chunk;
       });
       res.on('end', function (req) {
-        console.log('helloooooo');
         // console.log(req.data);
         console.log(str);
+        str = JSON.parse(str);
+        io.to(socket_id).emit('dest_address', {dest_address: str.destination});
       });
-      res.on('error', function(error) {
-        console.log(error);
-      });
+      res.on('error', function(error) { console.log(error); });
     }).end();
+
+
+    
+
   });
+
 
 }); // end io
 
