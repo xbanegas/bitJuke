@@ -59,10 +59,19 @@ h2 {
 }
 
 h3 {
-  .fontBold;
-  font-size: 20px;
+  .fontLight;
+  font-size: 30px;
   text-align: center;
-  color: @white;
+  color: @mint;
+}
+
+h4 {
+  .fontItalic;
+  font-size: 18px;
+  text-align: center;
+  color: @mint;
+  letter-spacing: 3px;
+  line-height:24px;
 }
 
 .border {
@@ -100,9 +109,9 @@ h3 {
   .subtitle {
     .mainTitle;
     width: 100%;
-    height: 20px;
+    height: 40px;
     text-shadow: none;
-    margin-top:40px;
+    margin-top:25px;
     position: relative;
 
   }
@@ -119,7 +128,7 @@ h3 {
 
   .search {
     width: 650px;
-    height: 50px;
+    height: 60px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
@@ -132,10 +141,11 @@ h3 {
     margin-left: auto;
     margin-right: auto;
     width: 500px;
+    height: 60px;
     padding-left: 20px;
     padding-right: 10px;
     .fontLight;
-    font-size: 35px;
+    font-size: 30px;
     appearance: none;
     box-shadow: none;
     .border;
@@ -161,9 +171,38 @@ h3 {
     border:0;
     border-color:transparent;
     overflow: hidden;
-    top:-47px;
+    top:-50px;
     left: -90px;
   }
 
   /*Donation Total Area*/
-  
+
+  .donationContainer {
+    width: 600px;
+    height: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    position: relative;
+  }
+
+    .donationAmount {
+      width: 600px;
+      height: 25px;
+      position: relative;
+      float: left;
+      .fontBold;
+      color: @white;
+      font-size: 22px;
+      text-align: center;
+      text-shadow: .2px 0px 1px @mint;
+    }
+
+    .donationOrganizations {
+      width: 600px;
+      min-height: 300px;
+      position: relative;
+      float: left;
+      margin-top: 10px;
+
+    }
