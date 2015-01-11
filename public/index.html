@@ -79,12 +79,13 @@
     </form>
 
     <div class="results">
-      <h2>Results</h2>
+      
     </div>
 
     <script id="results-template" type="text/x-handlebars-template">
-      {{#each tracks.items}}
-        {{name}} <button value="{{uri}}">Add Song</button>
+      <h2>Results</h2>
+      {{#each tracks.[0].track}}
+        {{title.[0]}} <button value="{{id.[0]}}">Add Song</button>
       {{/each}}
     </script>
 
@@ -96,15 +97,17 @@
     <script id="queue-template" type="text/x-handlebars-template">
     </script>
 
+
+
     <!-- End of App -->
 
 
-
-
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
     <script src="client.js"></script>
+
 
     </body>
 </html>
