@@ -19,17 +19,33 @@ var username = '12762386';
 var password = 'nofreem1nd';
 var client_id = '0ac7bdea5e14428c9884c3c933a304bd'; // Your client id
 var client_secret = '5e313bf5c84c478597175653cf557a9e'; // Your client secret
-var redirect_uri = 'http://74a39f61.ngrok.com'; // Your redirect uri
-var btc_address = '12q9g98HoFzpTqDaHQo3Ey6ufTMbhCL44u';
+var uri = 'http://74a39f61.ngrok.com';
+var redirect_uri = uri + '/callback'; // Your redirect uri
+var pay_redirect_uri = uri + '/add_song';
+var btc_address = '1P38omURqPRpJzEiwkxF2nAY5rFHsz9v4h';
+
+var spotify_token = '';
 
 app.use(express.static(__dirname + '/public'))
    .use(cookieParser());
 
 app.get('/callback', function(req, res){
   console.log('response from blockchain received');
-  console.log(req);
+  console.log(req.query);
+  // res.send('hello callback world');
+  // @TODO spotify add to queue
+  // var options = {
+  //   host: 'blockchain.info',
+  //   path: '/api/receive?method=create&address=' + btc_address + '&callback=' + encodeURIComponent(redirect_uri)
+  // };
+  // var req = https.get(options, function(res) {
+
+  // };
 });
 
+app.get('/add_song', function(req, res){
+  console.log(req);
+});
 
 io.on('connection', function (socket){
   console.log('socket connection');
@@ -38,7 +54,11 @@ io.on('connection', function (socket){
   socket.on('search_request', function(search_term) {
     Spotify.login(username, password, function (err, spotify) {
       if (err) throw err;
-      // console.log(spotify.settings.credentials);
+      var credentials_string = spotify.settings.credentials[0];
+      var token_index = credentials_string.search('"token');
+      var token_string = credentials_string.substr(token_index, credentials_string.indexOf('}'));
+      var token = JSON.parse('{'+ token_string).token;
+      spotify_token = token;
       spotify.search(search_term.search_term, function(err, xml){
         if (err) throw err;
         // @TODO remove this and place elsewhere for speed?
@@ -52,8 +72,8 @@ io.on('connection', function (socket){
     });
   });
 
-  var str = '';
-  socket.on('song_requested', function(){
+  var blockchain_response = ''; // starts as string, becomes JSON in res.end
+  socket.on('song_requested', function(uri){
     var socket_id = socket.id;
     var options = {
       host: 'blockchain.info',
@@ -64,22 +84,29 @@ io.on('connection', function (socket){
     var req = https.get(options, function(res) {
       console.log('new address request');
       console.log("statusCode: ", res.statusCode);
-      console.log("headers: ", res.headers);
+      // console.log("headers: ", res.headers);
       res.on('data', function (chunk) {
-        str += chunk;
+        blockchain_response += chunk;
       });
       res.on('end', function (req) {
         // console.log(req.data);
-        console.log(str);
-        str = JSON.parse(str);
-        io.to(socket_id).emit('dest_address', {dest_address: str.destination});
+        // console.log(blockchain_response);
+        blockchain_response = JSON.parse(blockchain_response);
+        console.log(blockchain_response);
+        // io.to(socket_id).emit('input_address', {input_address: blockchain_response.input_address});
       });
       res.on('error', function(error) { console.log(error); });
     }).end();
+  });
 
-
-    
-
+  socket.on('amount_submitted', function(amount) {
+    var socket_id = socket.id;
+    var input_address = blockchain_response.input_address;
+    amount = amount.amount;
+    var input_uri = 'bitcoin:' + input_address + '?amount=' + amount + '&callback=' + encodeURIComponent(pay_redirect_uri);
+    console.log(input_uri);
+    // @TODO validate amount 
+    io.to(socket_id).emit('payment_info', { input_address: input_address, input_uri: input_uri });
   });
 
 

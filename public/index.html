@@ -84,17 +84,27 @@
 
     <script id="results-template" type="text/x-handlebars-template">
       <h2>Results</h2>
+      <div class="result-tracks">
       {{#each tracks.[0].track}}
-        {{title.[0]}} <button value="{{id.[0]}}">Add Song</button>
+        {{title.[0]}} <button value="{{id.[0]}}">Add Song</button> <br>
       {{/each}}
+      </div>
     </script>
+
+    <!-- Bid Modal -->
+    <div id="bid" style="display:none;">
+      <form class="transaction" action="">
+        amount<input type="text" class="amount">
+        <button>Submit</button>
+      </form>
+    </div>
 
     <!-- Queue -->
     <div class="queue">
-      <h2>Queue</h2>
     </div>
 
     <script id="queue-template" type="text/x-handlebars-template">
+      <h2>Queue</h2>
     </script>
 
 
@@ -105,7 +115,7 @@
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-
+    <script src="https://cdn.firebase.com/js/client/2.1.0/firebase.js"></script>
     <script src="client.js"></script>
 
 
