@@ -19,7 +19,7 @@ var username = '12762386';
 var password = 'nofreem1nd';
 var client_id = '0ac7bdea5e14428c9884c3c933a304bd'; // Your client id
 var client_secret = '5e313bf5c84c478597175653cf557a9e'; // Your client secret
-var redirect_uri = 'http://127.0.0.1:8888/callback'; // Your redirect uri
+var redirect_uri = 'http://74a39f61.ngrok.com'; // Your redirect uri
 var btc_address = '12q9g98HoFzpTqDaHQo3Ey6ufTMbhCL44u';
 
 app.use(express.static(__dirname + '/public'))
@@ -63,11 +63,16 @@ io.on('connection', function (socket){
       console.log('new address request');
       console.log("statusCode: ", res.statusCode);
       console.log("headers: ", res.headers);
-      res.on('end', function () {
-        console.log('helloooooo');
-        console.log(req.data);
+      var str = '';
+      res.on('data', function (chunk) {
+        str += chunk;
       });
-      res.on('error', function(error){
+      res.on('end', function (req) {
+        console.log('helloooooo');
+        // console.log(req.data);
+        console.log(str);
+      });
+      res.on('error', function(error) {
         console.log(error);
       });
     }).end();
