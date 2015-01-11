@@ -74,6 +74,10 @@ h4 {
   line-height:24px;
 }
 
+p {
+  padding-top: 15px;
+}
+
 .border {
   border: none;
   -webkit-border-radius: 15px;
@@ -204,5 +208,224 @@ h4 {
       position: relative;
       float: left;
       margin-top: 10px;
-
     }
+
+/*Search Results*/
+
+  /*Search Bar - Enlarged*/
+
+  .searchBig  {
+    .search;
+    width: 700px;
+    height: 70px;
+    margin-bottom: 0px;
+  }
+
+  .searchBig input[type="text"] {
+    display: block;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+    width: 700px;
+    height: 70px;
+    vertical-align: top;
+    .fontLight;
+    font-size: 45px;
+    appearance: none;
+    box-shadow: none;
+    .border;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.47);
+    color: @grey;
+  }
+
+  .searchBig input[type="text"]:focus {
+    outline: none;
+  }
+
+  input#magGlassTwo {
+    width: 43px;
+    height: 43px;
+    position: relative;
+    float: right;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-image: url(/images/magGlass@2x.png);
+    background-size: 43px 43px;
+    background-color: transparent;
+    border:0;
+    border-color:transparent;
+    overflow: hidden;
+    top:-55px;
+    left: -15px;
+  }
+
+
+
+  /*Results List*/
+
+  .results {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 60px;
+    height: 350px;
+    position: relative;
+    top: -5px;
+  }
+
+    .resultsCategories {
+      width: 100%;
+      padding-left: 70px;
+      height: 45px;
+      background-color: rgba(255, 255, 255, 0.47);
+      margin-top: 5px;
+      color: @grey;
+      .border;
+      position: relative;
+      float: left;
+      .fontLight;
+      font-size: 30px;
+      text-align: center;
+      text-decoration: underline;
+    }
+
+      .resultsColumns {
+        width: 140px;
+        height: 100%;
+        position: relative;
+        float: left;
+        margin-right: 5px;
+        margin-left: 10px;
+        vertical-align: middle;
+      }
+
+    .resultsRow {
+      width: 100%;
+      height: 70px;
+      position: relative;
+      float: left;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      .fontLight;
+      font-size: 20px;
+      text-align: center;
+      color: @grey;
+    }
+
+      #firstRow {
+        margin-top: 30px;
+      }
+
+
+      .resultsAlbum {
+        width: 70px;
+        height: 100%;
+        position: relative;
+        float: left;
+        margin-right: 5px;
+        margin-left: 5px;
+      }
+      .albumArtwork {
+        border-radius: 50%;
+        width: 65px;
+        height: 65px;
+        background-image: url(/images/chromesparksGoddess@2x.png);
+        background-size: 65px 65px;
+      }
+
+      .add {
+        width: 40px;
+        height: 40px;
+        background-position: center;
+        margin-left: 40px;
+        margin-top: 10px;
+        background-image: url(/images/add@2x.png);
+        background-size: 40px 40px;
+      }
+
+      .check {
+        .add;
+        background-image: url(/images/check@2x.png);
+      }
+
+/*Queue*/
+
+.queue {
+  width: 700px;
+  height: 250px;
+  position: relative;
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+  .queueHeader {
+    width: 400px;
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0.47);
+    color: @grey;
+    .border;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    .fontLight;
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .queueRow {
+    width: 100%;
+    height: 190px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+
+    .queueColumn {
+      width: 130px;
+      height: 180px;
+      padding-top: 3px;
+      position: relative;
+      float: left;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+      .playing {
+        width: 100px;
+        height: 20px;
+        left: -10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        .fontLight;
+        color: @red;
+        font-size: 20px;
+        position: relative;
+        float: left;
+        text-align: center;
+      }
+
+
+
+      .queueArtwork {
+        .albumArtwork;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: relative;
+        float: left;
+      }
+
+      .queueInfo {
+        width: 80px;
+        height: 40px;
+        margin-top: 5px;
+        position: relative;
+        float: left;
+        text-align: center;
+        font-size: 15px;
+        color: @grey;
+        line-height: 16px;
+        left: -10px;
+      }

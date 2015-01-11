@@ -115,9 +115,54 @@
 
   <!--Results-->
 
+  <div class="searchContainer">
+
+    <form class="searchBig">
+
+      <!--the value of the input should contain the previous search term-->
+      <input type="text" name="searchTwo" id="searchTwo"
+      value="chrome sparks"
+      onfocus="MM_setTextOfTextfield('searchTwo','','',
+      'search for an artist, song or album')"
+      onblur="MM_setTextOfTextfieldEmpty('searchTwo','',
+      'search for an artist, song or album')">
+    </input>
+    <!--spy glass should only show when the user deletes any character from the previous search term-->
+    <input type="submit" id="magGlassTwo" value=""></input>
+  </form>
+</div>
+
+
     <div class="results">
-      <h2>Results</h2>
-    </div>-->
+      <!--Header-->
+      <div class="resultsCategories">
+        <div class="resultsColumns">track</div>
+        <div class="resultsColumns">album</div>
+        <div class="resultsColumns">artist</div>
+        <div class="resultsColumns">add</div>
+      </div>
+
+      <!--Results Rows-->
+
+        <!--First Row-->
+      <div class="resultsRow" id="firstRow">
+        <div class="resultsAlbum"><div class="albumArtwork" style="background-image: url(/images/chromesparksLosingYou@2x.png);"></div></div>
+        <div class="resultsColumns" id="trackName"><p>losing you</p></div>
+        <div class="resultsColumns" id="albumName"><p>-----</p></div>
+        <div class="resultsColumns" id="artistName"><p>chrome sparks</p></div>
+        <div class="resultsColumns" id="add"><div class="add"></div></div>
+      </div>
+
+      <!--Second Row-->
+      <div class="resultsRow">
+        <div class="resultsAlbum"><div class="albumArtwork"></div></div>
+        <div class="resultsColumns" id="trackName"><p>goddess</p></div>
+        <div class="resultsColumns" id="albumName"><p>goddess</p></div>
+        <div class="resultsColumns" id="artistName"><p>chrome sparks</p></div>
+        <div class="resultsColumns" id="add"><div class="check"></div></div>
+      </div>
+
+    </div>
 
     <script id="results-template" type="text/x-handlebars-template">
       {{#each tracks.items}}
@@ -126,9 +171,21 @@
     </script>
 
     <!-- Queue -->
-    <!--<div class="queue">
-      <h2>Queue</h2>
-    </div>-->
+
+    <div class="queue">
+
+      <!--header-->
+      <div class="queueHeader">queue</div>
+
+      <!--Songs Added-->
+      <div class="queueRow">
+        <div class="queueColumn">
+          <div class="playing">NOW PLAYING</div>
+          <div style="width: 130px; height: 65px; position:relative; float:left; margin-top: 5px;"><div class="queueArtwork"></div></div>
+          <div class="queueInfo"><span class="fontLight">goddess<br /><span class="fontItalic">chrome sparks</div>
+        </div>
+      </div>
+    </div>
 
     <script id="queue-template" type="text/x-handlebars-template">
     </script>
