@@ -1,0 +1,46 @@
+extends ../layout
+block content
+  .container
+    .container
+      h1 BitTunes
+    // Search and Results
+    .container
+      form.search
+        h2 Search
+        input(type='text')
+        button Search
+ 
+    .container
+      .col-xs-6
+        .results
+        #bid(style='margin-top:15px;display:none;')
+          form.transaction(action='')
+            | BTC donation:
+            input.amount(type='text', placeholder='0.0008')
+            button Submit
+        .payment
+      .col-xs-6
+        .queue
+
+    script#results-template(type='text/x-handlebars-template').
+      <div class="result-tracks">
+      <h2>Results</h2> {{#each tracks.[0].track}}
+      <div class="row">
+      <div class="col-xs-2">
+      <img src="https://d3rt1990lpmkn.cloudfront.net/cover/{{cover-small.[0]}}" class="img-responsive">
+      </div>
+      <div class="col-xs-10">
+      {{artist.[0]}} - {{title.[0]}}
+      <button value="{{id.[0]}}">Add Song</button>
+      </div>
+      </div>
+      {{/each}}
+      </div>
+
+    script#payment-template(type='text/x-handlebars-template').
+      <iframe width="150" height="150" src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl={{input_uri}}"></iframe><br>
+      <a href="{{input_uri}}">click to donate: {{input_address}}</a>
+      <button>Done</button>
+
+    script#queue-template(type='text/x-handlebars-template').
+      <h2>Queue</h2>
