@@ -2,5 +2,10 @@ extends layout
 
 block content
       h1 BitTunes
-      h2 Create a Jukebox
+      h2 
+        a(href="/jukebox/create") Create a Jukebox
       h2 Join a Jukebox
+      ul
+          each name in jukebox_names
+              li
+                a(href="jukebox/" + name)= name

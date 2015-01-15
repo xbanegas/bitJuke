@@ -13,18 +13,21 @@ exports.getName = function(req, res) {
 };
 
 exports.postName = function(req, res) {
-  var access_token = req.query.access_token;
+  console.log('posting name');
+  var spotify_id = req.query.spotify_id;
   var jukebox_name = req.body.name;
+  console.log(spotify_id + ' ' + jukebox_name);
 
-  Jukebox.findOne({ token: access_token }, function(err, jukebox) {
+  Jukebox.findOne({ spotify_id: spotify_id }, function(err, jukebox) {
     if (jukebox && jukebox_name != 'name') {
       jukebox.name = jukebox_name || '';
       jukebox.save(function(err) {
         if (err) return next(err);
-        res.redirect('jukebox/' + jukebox_name);
+        res.redirect('/jukebox/' + jukebox_name);
       });
+    } else {
+      res.redirect('/');
     }
-    res.redirect('/');
   });
 };
 
