@@ -22,21 +22,19 @@
     var paymentSource = document.getElementById('payment-template').innerHTML,
         paymentTemplate = Handlebars.compile(paymentSource);
 
+    // Request the queue on page load
+    socket.emit('queue_request', {jukebox_name: jukebox_name});
+    socket.on('queue_response', function(tracks){
+      $('.queue').html(queueTemplate(tracks));
+    });
+
+    // Make search request
     $('.search button').click(function(){
-      // Get search term and send to server
       var search_term = $('.search input').val();
       socket.emit('search_request', {jukebox_name: jukebox_name, search_term: search_term});
       return false;
     });
-
-    socket.emit('queue_request', {jukebox_name: jukebox_name});
-    socket.on('queue_response', function(tracks){
-      console.log(tracks);
-      $('.queue').html(queueTemplate(tracks));
-    });
-
     socket.on('search_result', function(results){
-      // ++num_searches;
       console.log('received results');
       console.log(results);
       $('.results').html(resultsTemplate(results));
@@ -55,16 +53,14 @@
           return false;
       });
     });
-    socket.on('input_address', function(input_address){
-      console.log(input_address + 'bitcoin uri...');
-    });
+    // socket.on('input_address', function(input_address){
+    //   console.log(input_address + 'bitcoin uri...');
+    // });
     socket.on('payment_info', function(payment_info){
       $('.payment').html(paymentTemplate(payment_info));
       $('.payment button').click(function(){
         $('.payment').hide();
       });
-      // fb_queue.push({song_uri: song_uri, input_address: input_address});
-
     });
   }
 })();

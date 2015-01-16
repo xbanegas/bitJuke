@@ -22,6 +22,8 @@ var cookieParser = require('cookie-parser');
 var xml2js = require('xml2js');
 
 var secrets = require('./config/secrets');
+var spotify = require('./spotify_modules/spotify');
+
 
 // var mopidy = new Mopidy({
 //   webSocketUrl: "ws://172.16.2.65:6680/mopidy/ws/"
@@ -110,73 +112,7 @@ app.get('/add_song', function(req, res){ console.log(req); });
   // https://api.spotify.com/v1/users/' + user_data.id + '/playlists/' + playlist_id + '/tracks'
 // };
 // 
-function spotifySearch(search_term, jukebox, socket_id) {
-  var spotify_id = jukebox.spotify_id;
-  var access_token = jukebox.token;
-  var refresh_token = jukebox.refresh_token;
-  var search_options = {
-    url: 'https://api.spotify.com/v1/search?q=' + search_term + '&type=album,track,artist',
-    headers: { 'Authorization': 'Bearer ' + access_token },
-    method: 'GET'
-  };
-  request(search_options, searchCallback);
 
-  function searchCallback(error, response, body) {
-    console.log('making search request');
-    if (!error && response.statusCode === 200) {
-      console.log('search success');
-      var search_results = JSON.parse(body);
-      io.to(socket_id).emit('search_result', search_results);
-      // If token expired refresh it
-    } else if (response.statusCode === 401) {
-      console.log('token expired');
-      refreshToken(jukebox, refresh_token);
-    } else { console.log('search fail'); }
-  }
-}
-
-function refreshToken(jukebox, refresh_token){
-  var refresh_uri = secrets.uri + '/refresh_token?refresh_token=' + refresh_token;
-  request(refresh_uri, function(error, response, body){
-    if (!error && response.statusCode === 200) {
-      console.log('token refreshed');
-      var new_token = JSON.parse(body).access_token;
-      console.log(new_token);
-      jukebox.token = new_token;
-      jukebox.save(function(error){
-        if (error) return next(error);
-        console.log('new token saved');
-      });
-    }
-  });
-}
-
-function spotifyGetTracks(tracks_uri, jukebox, socket_id) {
-  var spotify_id = jukebox.spotify_id;
-  var access_token = jukebox.token;
-  var refresh_token = jukebox.refresh_token;
-  var search_options = {
-    url: tracks_uri,
-    headers: { 'Authorization': 'Bearer ' + access_token },
-    json: true,
-    method: 'GET',
-  };
-  request(search_options, tracksCallback);
-
-  function tracksCallback(error, response, body) {
-    console.log('making playlist tracks GET');
-    if (!error && response.statusCode === 200 || response.statusCode === 201) {
-      console.log('tracks retrieve success');
-      var tracks_response = body;
-      console.log(tracks_response);
-      io.to(socket_id).emit('queue_response', {tracks: tracks_response});
-    // ELSE IF token expired refresh it
-    } else if (response.statusCode === 401 || response.statusCode === 400) {
-      console.log('token expired');
-      refreshToken(jukebox, refresh_token, spotifyGetTracks);
-    } else { console.log('tracks retrieval fail'); }
-  }
-}
 
 io.on('connection', function (socket){
   console.log('socket connection');
@@ -190,7 +126,7 @@ io.on('connection', function (socket){
       if (err) console.log(err);
       if (jukebox){
         var tracks_uri = jukebox.playlist + '/tracks/';
-        spotifyGetTracks(tracks_uri, jukebox, socket_id);
+        spotify.getTracks(tracks_uri, jukebox, io, socket_id);
       }
     });
   });
@@ -202,7 +138,7 @@ io.on('connection', function (socket){
     // Get spotify credentials using jukebox name
     Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
       if (err) return next(err);
-      if (jukebox) { spotifySearch(search_term, jukebox, socket_id); }
+      if (jukebox) { spotify.search(search_term, jukebox, io, socket_id); }
     });
   });
 
