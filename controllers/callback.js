@@ -4,6 +4,7 @@ var Jukebox = require('../models/Jukebox');
 var secrets = require('../config/secrets');
 
 exports.index = function(req, res) {
+  'use strict';
   var stateKey = req.app.get('stateKey');
   var client_id = secrets.client_id;
   var client_secret = secrets.client_secret;
@@ -72,4 +73,4 @@ exports.index = function(req, res) {
       }
     });
   }
-}
+};

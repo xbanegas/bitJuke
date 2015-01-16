@@ -2,6 +2,7 @@ var querystring = require('querystring');
 var secrets = require('../config/secrets');
 
 exports.index = function(req, res) {
+  'use strict';
   var stateKey = req.app.get('stateKey');
   var state = req.app.get('generateRandomString')(16);
   var client_id = secrets.client_id;

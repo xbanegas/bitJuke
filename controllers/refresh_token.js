@@ -2,6 +2,7 @@ var request = require('request');
 var secrets = require('../config/secrets');
 
 module.exports.index = function(req, res){
+  'use strict';
   var client_id = secrets.client_id;
   var client_secret = secrets.client_secret;
   var refresh_token = req.query.refresh_token;

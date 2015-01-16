@@ -23,7 +23,6 @@ var xml2js = require('xml2js');
 
 var secrets = require('./config/secrets');
 
-
 // var mopidy = new Mopidy({
 //   webSocketUrl: "ws://172.16.2.65:6680/mopidy/ws/"
 // });
@@ -38,6 +37,7 @@ var callbackController = require('./controllers/callback');
 var jukeboxController = require('./controllers/jukebox');
 var loginController = require('./controllers/login');
 var refreshController = require('./controllers/refresh_token');
+var blockchainController = require('./controllers/blockchain');
 
 /**
 *
@@ -100,67 +100,38 @@ app.get('/jukebox/create', jukeboxController.create);
 app.get('/jukebox/name', jukeboxController.getName);
 app.post('/jukebox/name', jukeboxController.postName);
 app.get('/jukebox/:name', jukeboxController.view);
-
-// when payment is received, blockchain makes a request here
-app.get('/blockchain', function(req, res){
-  console.log('response from blockchain received');
-  console.log(getDate());
-  console.log(req.query);
-
-  function addZero(i) { if (i < 10) { i = "0" + i; } return i; }
-  function getDate() {
-      var d = new Date();
-      var x = '';
-      var h = addZero(d.getHours());
-      var m = addZero(d.getMinutes());
-      var s = addZero(d.getSeconds());
-      x = h + ":" + m + ":" + s;
-      return x;
-  }
-  // res.send('hello callback world');
-  // @TODO spotify add to queue
-  // var options = {
-  //   host: 'blockchain.info',
-  //   path: '/api/receive?method=create&address=' + btc_address + '&callback=' + encodeURIComponent(redirect_uri)
-  // };
-  // var req = https.get(options, function(res) {
-
-  // };
-});
+app.get('/blockchain', blockchainController.index);
 
 // ideally this is what gets called when a payment is just made from wallet or scanned
 // should take user back to jukebox queue
-app.get('/add_song', function(req, res){
-  console.log(req);
-});
-
+app.get('/add_song', function(req, res){ console.log(req); });
 
 function spotifyCreatePlaylist() {
-  // @TODO get username
-  var username;
-  console.log('creating playlist');
-  var options = {
-    host: 'api.spotify.com',
-    path: '/v1/users/' + username + '/playlists',
-    method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + spotify_token },
-  };
-  var req = https.request(options, function(res) {
-    console.log('STATUS: ' + res.statusCode);
-    console.log('HEADERS: ' + JSON.stringify(res.headers));
-    res.setEncoding('utf8');
-    res.on('data', function (chunk) {
-      console.log('BODY: ' + chunk);
-    });
-  });
+  // // @TODO get username
+  // var username;
+  // console.log('creating playlist');
+  // var options = {
+  //   host: 'api.spotify.com',
+  //   path: '/v1/users/' + username + '/playlists',
+  //   method: 'POST',
+  //   headers: { 'Authorization': 'Bearer ' + spotify_token },
+  // };
+  // var req = https.request(options, function(res) {
+  //   console.log('STATUS: ' + res.statusCode);
+  //   console.log('HEADERS: ' + JSON.stringify(res.headers));
+  //   res.setEncoding('utf8');
+  //   res.on('data', function (chunk) {
+  //     console.log('BODY: ' + chunk);
+  //   });
+  // });
 
-  req.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
-  });
+  // req.on('error', function(e) {
+  //   console.log('problem with request: ' + e.message);
+  // });
 
-  // write data to request body
-  req.write('{"name":"A New Playlist", "public":false}"');
-  req.end();
+  // // write data to request body
+  // req.write('{"name":"A New Playlist", "public":false}"');
+  // req.end();
 }
 
 // function spotifyAddTrack(){
@@ -180,12 +151,12 @@ function spotifySearch(search_term, jukebox, socket_id) {
 
   function searchCallback(error, response, body) {
     console.log('making search request');
-    if (!error && response.statusCode == 200) {
+    if (!error && response.statusCode === 200) {
       console.log('search success');
       var search_results = JSON.parse(body);
       io.to(socket_id).emit('search_result', search_results);
       // If token expired refresh it
-    } else if (response.statusCode == 401) {
+    } else if (response.statusCode === 401) {
       console.log('token expired');
       refreshToken(jukebox, refresh_token);
     } else { console.log('search fail'); }
@@ -195,7 +166,7 @@ function spotifySearch(search_term, jukebox, socket_id) {
 function refreshToken(jukebox, refresh_token){
   var refresh_uri = secrets.uri + '/refresh_token?refresh_token=' + refresh_token;
   request(refresh_uri, function(error, response, body){
-    if (!error && response.statusCode == 200) {
+    if (!error && response.statusCode === 200) {
       console.log('token refreshed');
       var new_token = JSON.parse(body).access_token;
       console.log(new_token);
