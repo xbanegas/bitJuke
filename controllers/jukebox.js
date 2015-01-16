@@ -28,7 +28,7 @@ exports.postName = function(req, res) {
       jukebox.save(function(err) {
         if (err) return next(err);
         // create spotify playlist of same name & redirect
-        spotifyCreatePlaylist(jukebox_name, jukebox);
+        spotifyCreatePlaylist(jukebox_name, jukebox, res);
       });
     } else {
       res.redirect('/');
@@ -37,13 +37,13 @@ exports.postName = function(req, res) {
 };
 
 exports.view = function(req, res) {
+  var jukebox_name = req.params.name;
   res.render('jukebox/jukebox', {
-    title: 'Jukebox'
+    title: jukebox_name
   });
 };
 
-
-function spotifyCreatePlaylist(playlist_name, jukebox) {
+function spotifyCreatePlaylist(playlist_name, jukebox, res) {
   var spotify_id = jukebox.spotify_id;
   var access_token = jukebox.token;
   var refresh_token = jukebox.refresh_token;
@@ -64,7 +64,7 @@ function spotifyCreatePlaylist(playlist_name, jukebox) {
       jukebox.playlist = body.href;
       jukebox.save(function(err) {
         if (err) return next(err);
-        response.redirect('/jukebox/' + jukebox_name);
+        res.redirect('/jukebox/' + jukebox.name);
       });
     // ELSE IF token expired refresh it
     } else if (response.statusCode === 401 || response.statusCode === 400) {

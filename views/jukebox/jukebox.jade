@@ -45,3 +45,16 @@ block content
 
     script#queue-template(type='text/x-handlebars-template').
       <h2>Queue</h2>
+      {{#each tracks.items}}
+        <div class="row">
+          <div class="col-xs-2">
+            <img src="{{track.album.images.[2].url}}" class="img-responsive">
+          </div>
+          <div class="col-xs-10">
+            {{track.artists.[0].name}} - {{track.name}}
+            <!-- <button value="{{track.id}}">Add Song</button> -->
+          </div>
+        </div>
+      {{/each}}
+
+

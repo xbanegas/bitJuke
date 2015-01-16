@@ -106,34 +106,6 @@ app.get('/blockchain', blockchainController.index);
 // should take user back to jukebox queue
 app.get('/add_song', function(req, res){ console.log(req); });
 
-function spotifyCreatePlaylist() {
-  // // @TODO get username
-  // var username;
-  // console.log('creating playlist');
-  // var options = {
-  //   host: 'api.spotify.com',
-  //   path: '/v1/users/' + username + '/playlists',
-  //   method: 'POST',
-  //   headers: { 'Authorization': 'Bearer ' + spotify_token },
-  // };
-  // var req = https.request(options, function(res) {
-  //   console.log('STATUS: ' + res.statusCode);
-  //   console.log('HEADERS: ' + JSON.stringify(res.headers));
-  //   res.setEncoding('utf8');
-  //   res.on('data', function (chunk) {
-  //     console.log('BODY: ' + chunk);
-  //   });
-  // });
-
-  // req.on('error', function(e) {
-  //   console.log('problem with request: ' + e.message);
-  // });
-
-  // // write data to request body
-  // req.write('{"name":"A New Playlist", "public":false}"');
-  // req.end();
-}
-
 // function spotifyAddTrack(){
   // https://api.spotify.com/v1/users/' + user_data.id + '/playlists/' + playlist_id + '/tracks'
 // };
@@ -179,9 +151,49 @@ function refreshToken(jukebox, refresh_token){
   });
 }
 
+function spotifyGetTracks(tracks_uri, jukebox, socket_id) {
+  var spotify_id = jukebox.spotify_id;
+  var access_token = jukebox.token;
+  var refresh_token = jukebox.refresh_token;
+  var search_options = {
+    url: tracks_uri,
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true,
+    method: 'GET',
+  };
+  request(search_options, tracksCallback);
+
+  function tracksCallback(error, response, body) {
+    console.log('making playlist tracks GET');
+    if (!error && response.statusCode === 200 || response.statusCode === 201) {
+      console.log('tracks retrieve success');
+      var tracks_response = body;
+      console.log(tracks_response);
+      io.to(socket_id).emit('queue_response', {tracks: tracks_response});
+    // ELSE IF token expired refresh it
+    } else if (response.statusCode === 401 || response.statusCode === 400) {
+      console.log('token expired');
+      refreshToken(jukebox, refresh_token, spotifyGetTracks);
+    } else { console.log('tracks retrieval fail'); }
+  }
+}
+
 io.on('connection', function (socket){
   console.log('socket connection');
   var socket_id = socket.id;
+
+  socket.on('queue_request', function(jukebox_name){
+    jukebox_name = jukebox_name.jukebox_name;
+    console.log(jukebox_name + ' queue_request');
+    Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
+      console.log(jukebox);
+      if (err) console.log(err);
+      if (jukebox){
+        var tracks_uri = jukebox.playlist + '/tracks/';
+        spotifyGetTracks(tracks_uri, jukebox, socket_id);
+      }
+    });
+  });
 
   socket.on('search_request', function(search_data) {
     console.log('search_request');
