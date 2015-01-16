@@ -52,7 +52,7 @@ exports.index = function(req, res) {
               }));
             // ELSE make a new jukebox and take to naming endpoint
             } else { 
-              var jukebox = new Jukebox({spotify_id: spotify_id, token: access_token, name: ''});
+              var jukebox = new Jukebox({spotify_id: spotify_id, token: access_token, name: '', refresh_token: refresh_token});
               jukebox.save(function(err) {
                 if (err) return next(err);
                 res.redirect('/jukebox/name/?' + 

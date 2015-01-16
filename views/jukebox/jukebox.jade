@@ -24,17 +24,18 @@ block content
 
     script#results-template(type='text/x-handlebars-template').
       <div class="result-tracks">
-      <h2>Results</h2> {{#each tracks.[0].track}}
-      <div class="row">
-      <div class="col-xs-2">
-      <img src="https://d3rt1990lpmkn.cloudfront.net/cover/{{cover-small.[0]}}" class="img-responsive">
-      </div>
-      <div class="col-xs-10">
-      {{artist.[0]}} - {{title.[0]}}
-      <button value="{{id.[0]}}">Add Song</button>
-      </div>
-      </div>
-      {{/each}}
+        <h2>Results</h2> 
+        {{#each tracks.items}}
+          <div class="row">
+            <div class="col-xs-2">
+              <img src="{{album.images.[2].url}}" class="img-responsive">
+            </div>
+            <div class="col-xs-10">
+              {{artists.[0].name}} - {{name}}
+              <button value="{{id}}">Add Song</button>
+            </div>
+          </div>
+        {{/each}}
       </div>
 
     script#payment-template(type='text/x-handlebars-template').

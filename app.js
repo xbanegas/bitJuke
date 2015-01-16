@@ -39,6 +39,7 @@ var homeController = require('./controllers/home');
 var callbackController = require('./controllers/callback');
 var jukeboxController = require('./controllers/jukebox');
 var loginController = require('./controllers/login');
+var refreshController = require('./controllers/refresh_token');
 
 /**
 *
@@ -92,9 +93,11 @@ app.set('stateKey', 'spotify_auth_state');
 * Routes
 *
 **/
+// @TODO put all spotify callbacks in one controller
 app.get('/', homeController.index);
 app.get('/login', loginController.index);
 app.get('/callback', callbackController.index);
+app.get('/refresh_token', refreshController.index);
 app.get('/jukebox/create', jukeboxController.create);
 app.get('/jukebox/name', jukeboxController.getName);
 app.post('/jukebox/name', jukeboxController.postName);
@@ -156,8 +159,56 @@ io.on('connection', function (socket){
   console.log('socket connection');
   var socket_id = socket.id;
 
-  socket.on('search_request', function(search_term) {
+
+  socket.on('search_request', function(search_data) {
     console.log('search_request');
+    var jukebox_name = search_data.jukebox_name;
+    var search_term = search_data.search_term;
+    // Get spotify credentials using jukebox name
+    Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
+      var spotify_id = jukebox.spotify_id;
+      var access_token = jukebox.token;
+      var refresh_token = jukebox.refresh_token;
+      var search_results;
+      function searchCallback(error, response, body) {
+        console.log('making search request');
+        console.log(response);
+        if (!error && response.statusCode == 200) {
+          console.log('search success');
+          var search_results = JSON.parse(body);
+          io.to(socket_id).emit('search_result', search_results);
+        } else { console.log('search fail'); }
+      }
+
+      // If jukebox exists, perform search and return results
+      if (jukebox) {
+        var search_options = {
+          url: 'https://api.spotify.com/v1/search?q=' + search_term + '&type=album,track,artist',
+          headers: { 'Authorization': 'Bearer ' + access_token },
+          method: 'GET'
+        };
+        // make search request
+        request(search_options, searchCallback);
+        // request.post(options, function(err,response,body){
+          // console.log('making request');
+
+          // if (response.statusCode) { 
+          //   var body_data = JSON.parse(body); 
+          //   console.log(body_data);
+          // }
+          // IF current access token is expired grab a new one
+          // if (body.error.status == 401) {
+          //   var refresh_options = {
+          //     url: secrets.url + '/refresh_token/?' + refresh_token
+          //   };
+          //   request.get(refresh_options, function(rfsh_err, rfsh_response, rfsh_body){
+          //     console.log(rfsh_response);
+          //   });
+          // }
+        // });
+      }
+    });
+
     // spotify.search(search_term.search_term, function(err, xml){
     //   if (err) {throw err;}
     //   // @TODO remove this and place elsewhere for speed?
