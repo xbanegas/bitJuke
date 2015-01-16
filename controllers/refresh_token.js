@@ -1,7 +1,9 @@
 var request = require('request');
+var secrets = require('../config/secrets');
 
 module.exports.index = function(req, res){
-  // requesting access token from refresh token
+  var client_id = secrets.client_id;
+  var client_secret = secrets.client_secret;
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
@@ -11,15 +13,20 @@ module.exports.index = function(req, res){
       grant_type: 'refresh_token',
       refresh_token: refresh_token
     },
-    json: true
+    json: true,
+    method: 'POST'
   };
 
-  request.post(authOptions, function(error, response, body) {
+  request(authOptions, function(error, response, body) {
+    console.log('requesting token');
     if (!error && response.statusCode === 200) {
+      console.log('token response: ');
+      console.log(body);
       var access_token = body.access_token;
-      res.send({
-        'access_token': access_token
-      });
+      res.send({ access_token: access_token });
+    } else {
+      console.log('token refresh fail');
+      console.log('body');
     }
   });
 };

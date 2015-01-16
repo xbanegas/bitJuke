@@ -23,8 +23,6 @@ var xml2js = require('xml2js');
 
 var secrets = require('./config/secrets');
 
-var spotify;
-var spotify_token;
 
 // var mopidy = new Mopidy({
 //   webSocketUrl: "ws://172.16.2.65:6680/mopidy/ws/"
@@ -103,10 +101,22 @@ app.get('/jukebox/name', jukeboxController.getName);
 app.post('/jukebox/name', jukeboxController.postName);
 app.get('/jukebox/:name', jukeboxController.view);
 
-
+// when payment is received, blockchain makes a request here
 app.get('/blockchain', function(req, res){
   console.log('response from blockchain received');
+  console.log(getDate());
   console.log(req.query);
+
+  function addZero(i) { if (i < 10) { i = "0" + i; } return i; }
+  function getDate() {
+      var d = new Date();
+      var x = '';
+      var h = addZero(d.getHours());
+      var m = addZero(d.getMinutes());
+      var s = addZero(d.getSeconds());
+      x = h + ":" + m + ":" + s;
+      return x;
+  }
   // res.send('hello callback world');
   // @TODO spotify add to queue
   // var options = {
@@ -118,6 +128,8 @@ app.get('/blockchain', function(req, res){
   // };
 });
 
+// ideally this is what gets called when a payment is just made from wallet or scanned
+// should take user back to jukebox queue
 app.get('/add_song', function(req, res){
   console.log(req);
 });
@@ -154,11 +166,51 @@ function spotifyCreatePlaylist() {
 // function spotifyAddTrack(){
   // https://api.spotify.com/v1/users/' + user_data.id + '/playlists/' + playlist_id + '/tracks'
 // };
+// 
+function spotifySearch(search_term, jukebox, socket_id) {
+  var spotify_id = jukebox.spotify_id;
+  var access_token = jukebox.token;
+  var refresh_token = jukebox.refresh_token;
+  var search_options = {
+    url: 'https://api.spotify.com/v1/search?q=' + search_term + '&type=album,track,artist',
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    method: 'GET'
+  };
+  request(search_options, searchCallback);
+
+  function searchCallback(error, response, body) {
+    console.log('making search request');
+    if (!error && response.statusCode == 200) {
+      console.log('search success');
+      var search_results = JSON.parse(body);
+      io.to(socket_id).emit('search_result', search_results);
+      // If token expired refresh it
+    } else if (response.statusCode == 401) {
+      console.log('token expired');
+      refreshToken(jukebox, refresh_token);
+    } else { console.log('search fail'); }
+  }
+}
+
+function refreshToken(jukebox, refresh_token){
+  var refresh_uri = secrets.uri + '/refresh_token?refresh_token=' + refresh_token;
+  request(refresh_uri, function(error, response, body){
+    if (!error && response.statusCode == 200) {
+      console.log('token refreshed');
+      var new_token = JSON.parse(body).access_token;
+      console.log(new_token);
+      jukebox.token = new_token;
+      jukebox.save(function(error){
+        if (error) return next(error);
+        console.log('new token saved');
+      });
+    }
+  });
+}
 
 io.on('connection', function (socket){
   console.log('socket connection');
   var socket_id = socket.id;
-
 
   socket.on('search_request', function(search_data) {
     console.log('search_request');
@@ -166,58 +218,9 @@ io.on('connection', function (socket){
     var search_term = search_data.search_term;
     // Get spotify credentials using jukebox name
     Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
-      var spotify_id = jukebox.spotify_id;
-      var access_token = jukebox.token;
-      var refresh_token = jukebox.refresh_token;
-      var search_results;
-      function searchCallback(error, response, body) {
-        console.log('making search request');
-        console.log(response);
-        if (!error && response.statusCode == 200) {
-          console.log('search success');
-          var search_results = JSON.parse(body);
-          io.to(socket_id).emit('search_result', search_results);
-        } else { console.log('search fail'); }
-      }
-
-      // If jukebox exists, perform search and return results
-      if (jukebox) {
-        var search_options = {
-          url: 'https://api.spotify.com/v1/search?q=' + search_term + '&type=album,track,artist',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-          method: 'GET'
-        };
-        // make search request
-        request(search_options, searchCallback);
-        // request.post(options, function(err,response,body){
-          // console.log('making request');
-
-          // if (response.statusCode) { 
-          //   var body_data = JSON.parse(body); 
-          //   console.log(body_data);
-          // }
-          // IF current access token is expired grab a new one
-          // if (body.error.status == 401) {
-          //   var refresh_options = {
-          //     url: secrets.url + '/refresh_token/?' + refresh_token
-          //   };
-          //   request.get(refresh_options, function(rfsh_err, rfsh_response, rfsh_body){
-          //     console.log(rfsh_response);
-          //   });
-          // }
-        // });
-      }
+      if (err) return next(err);
+      if (jukebox) { spotifySearch(search_term, jukebox, socket_id); }
     });
-
-    // spotify.search(search_term.search_term, function(err, xml){
-    //   if (err) {throw err;}
-    //   // @TODO remove this and place elsewhere for speed?
-    //   var parser = new xml2js.Parser();
-    //   parser.on('end', function (data) {
-    //     io.to(socket_id).emit('search_result', data.result);
-    //   });
-    //   parser.parseString(xml);
-    // });
   });
 
   var blockchain_response = ''; // starts as string, becomes JSON in res.end
@@ -225,10 +228,10 @@ io.on('connection', function (socket){
     var socket_id = socket.id;
     var options = {
       host: 'blockchain.info',
-      path: '/api/receive?method=create&address=' + btc_address + '&callback=' + encodeURIComponent(blockchain_redirect_uri)
+      path: '/api/receive?method=create&address=' + secrets.btc_address + '&callback=' + encodeURIComponent(secrets.blockchain_redirect_uri)
     };
     console.log(options.host + options.path);
-    
+    // @TODO Can clean up this section by using request module
     var req = https.get(options, function(res) {
       console.log('new address request');
       console.log('statusCode: ', res.statusCode);
@@ -248,7 +251,7 @@ io.on('connection', function (socket){
     var socket_id = socket.id;
     var input_address = blockchain_response.input_address;
     amount = amount.amount;
-    var input_uri = 'bitcoin:' + input_address + '?amount=' + amount + '&callback=' + encodeURIComponent(pay_redirect_uri);
+    var input_uri = 'bitcoin:' + input_address + '?amount=' + amount + '&callback=' + encodeURIComponent(secrets.pay_redirect_uri);
     console.log(input_uri);
     // @TODO validate amount 
     io.to(socket_id).emit('payment_info', { input_address: input_address, input_uri: input_uri });
