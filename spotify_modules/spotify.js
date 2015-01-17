@@ -9,6 +9,7 @@ var secrets = require('../config/secrets');
 module.exports.search = search;
 module.exports.refreshToken = refreshToken;
 module.exports.getTracks = getTracks;
+module.exports.addTrack = addTrack;
 
 function search(search_term, jukebox, io, socket_id) {
   var spotify_id = jukebox.spotify_id;
@@ -35,6 +36,7 @@ function search(search_term, jukebox, io, socket_id) {
   }
 }
 
+// @TODO third param repeat callback
 function refreshToken(jukebox, refresh_token){
   var refresh_uri = secrets.uri + '/refresh_token?refresh_token=' + refresh_token;
   request(refresh_uri, function(error, response, body){
@@ -76,4 +78,35 @@ function getTracks(tracks_uri, jukebox, io, socket_id) {
       refreshToken(jukebox, refresh_token, getTracks);
     } else { console.log('tracks retrieval fail'); }
   }
+}
+
+function addTrack(track_id, jukebox, io){
+  var spotify_id = jukebox.spotify_id;
+  var playlist_uri = jukebox.playlist;
+  var access_token = jukebox.token;
+  var refresh_token = jukebox.refresh_token;
+  var jukebox_name = jukebox.name;
+  console.log(jukebox);
+  var options = {
+    url: playlist_uri + '/tracks?uris=spotify:track:' + track_id,
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true,
+    method: 'POST'
+  };
+  request(options, addTrackCallback);
+
+  function addTrackCallback(error, response, body) {
+    console.log('adding tracks POST');
+    // console.log(body);  
+    if (!error && response.statusCode === 200 || response.statusCode === 201) {
+      console.log('tracks POST success');
+      // @TODO make rooms and broadcast only to sockets associated with that jukebox
+      io.emit('song_added', {jukebox_name: jukebox_name});
+    // ELSE IF token expired refresh it
+    } else if (response.statusCode === 401 || response.statusCode === 400 || response.statusCode === 403) {
+      console.log('token expired');
+      // refreshToken(jukebox, refresh_token);
+    } else { console.log('add track fail'); console.log(body); }
+  }
+
 }

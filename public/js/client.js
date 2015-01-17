@@ -5,6 +5,7 @@
   var socket = io();
   var num_searches = 0;
   var song_uri = '';
+  var queue;
 
   // Temporarily tying this JS to jukebox page w/ search button
   if ($('.search button')) {
@@ -25,6 +26,8 @@
     // Request the queue on page load
     socket.emit('queue_request', {jukebox_name: jukebox_name});
     socket.on('queue_response', function(tracks){
+      console.log('queue_response fired');
+      queue = tracks;
       $('.queue').html(queueTemplate(tracks));
     });
 
@@ -40,7 +43,7 @@
       $('.results').html(resultsTemplate(results));
       $('.results button').click(function(){
           song_uri = this.value;
-          socket.emit('song_requested', {uri: song_uri});
+          socket.emit('song_requested', {jukebox_name: jukebox_name, song_uri: song_uri});
           $('.result-tracks').hide();
           $('#bid').show();
           $('#bid button').click(function(){
@@ -61,6 +64,12 @@
       $('.payment button').click(function(){
         $('.payment').hide();
       });
+    });
+
+    socket.on('song_added', function(emitted){
+      if (jukebox_name == emitted.jukebox_name){
+        socket.emit('queue_request', {jukebox_name: jukebox_name});
+      }
     });
   }
 })();

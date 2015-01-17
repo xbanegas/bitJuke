@@ -106,15 +106,12 @@ app.get('/blockchain', blockchainController.index);
 
 // ideally this is what gets called when a payment is just made from wallet or scanned
 // should take user back to jukebox queue
-app.get('/add_song', function(req, res){ console.log(req); });
-
-// function spotifyAddTrack(){
-  // https://api.spotify.com/v1/users/' + user_data.id + '/playlists/' + playlist_id + '/tracks'
-// };
-// 
-
+// app.get('/add_song', function(req, res){ console.log(req); });
 
 io.on('connection', function (socket){
+  // doing this for blockchain broadcast add to queues
+  app.set('io', io);
+
   console.log('socket connection');
   var socket_id = socket.id;
 
@@ -143,11 +140,13 @@ io.on('connection', function (socket){
   });
 
   var blockchain_response = ''; // starts as string, becomes JSON in res.end
-  socket.on('song_requested', function(uri){
+  socket.on('song_requested', function(request_data){
+    var jukebox_name = request_data.jukebox_name;
+    var song_uri = request_data.song_uri;
     var socket_id = socket.id;
     var options = {
       host: 'blockchain.info',
-      path: '/api/receive?method=create&address=' + secrets.btc_address + '&callback=' + encodeURIComponent(secrets.blockchain_redirect_uri)
+      path: '/api/receive?method=create&address=' + secrets.btc_address + '&callback=' + encodeURIComponent(secrets.blockchain_redirect_uri + '?jukebox=' + jukebox_name + '&song_uri=' + song_uri)
     };
     console.log(options.host + options.path);
     // @TODO Can clean up this section by using request module
@@ -176,9 +175,9 @@ io.on('connection', function (socket){
     io.to(socket_id).emit('payment_info', { input_address: input_address, input_uri: input_uri });
   });
 
-  socket.on('new_jukebox', function(name){
+  // socket.on('new_jukebox', function(name){
 
-  });  
+  // });  
 
 
 }); // end io
