@@ -17,10 +17,10 @@ exports.index = function(req, res) {
   var storedState = req.cookies ? req.cookies[stateKey] : null;
 
   if (state === null || state !== storedState) {
-  res.redirect('/#' +
-    querystring.stringify({
-      error: 'state_mismatch'
-    }));
+    res.redirect('/#' +
+      querystring.stringify({
+        error: 'state_mismatch'
+      }));
   } else {
     res.clearCookie(stateKey);
     var authOptions = {
@@ -47,15 +47,22 @@ exports.index = function(req, res) {
           Jukebox.findOne({ spotify_id: spotify_id }, function(err, existingJukebox) {
             // IF jukebox exists and doesn't have a name, take to naming endpoint
             if (existingJukebox && existingJukebox.name == '') {
+              req.app.get('createJukeboxSession')(req, res, existingJukebox);
               res.redirect('/jukebox/name/?' + 
                 querystring.stringify({
                 spotify_id: spotify_id
               }));
-            // ELSE make a new jukebox and take to naming endpoint
-            } else { 
+            // ELSE IF jukebox exists and has name, take user to login page
+            } else if (existingJukebox && existingJukebox.name) {
+              req.app.get('createJukeboxSession')(req, res, existingJukebox);
+              // @TODO! add jukebox without token to session cookie
+              res.redirect('/jukebox/' + existingJukebox.name + '/admin');
+            // ELSE IF no jukebox, make a new one and take to naming endpoint
+            } else {
               var jukebox = new Jukebox({spotify_id: spotify_id, token: access_token, name: '', refresh_token: refresh_token});
               jukebox.save(function(err) {
                 if (err) return next(err);
+                req.app.get('createJukeboxSession')(req, res, jukebox);
                 res.redirect('/jukebox/name/?' + 
                   querystring.stringify({
                   spotify_id: spotify_id,

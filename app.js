@@ -1,6 +1,7 @@
 'use strict';
 
 var util = require('util');
+var secrets = require('./config/secrets');
 
 var bodyParser = require('body-parser');
 var express = require('express');
@@ -17,11 +18,13 @@ var Jukebox = require('./models/Jukebox');
 
 var request = require('request');
 var cookieParser = require('cookie-parser');
+var session = require('client-sessions');
+var csrf = require('csurf');
+
 
 // var Mopidy = require('mopidy');
 var xml2js = require('xml2js');
 
-var secrets = require('./config/secrets');
 var spotify = require('./spotify_modules/spotify');
 
 
@@ -43,6 +46,60 @@ var blockchainController = require('./controllers/blockchain');
 
 /**
 *
+* Spotify Auth Code
+*
+**/
+var generateRandomString = function(length) {
+  var text = '', possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (var i = 0; i < length; i++) { text += possible.charAt(Math.floor(Math.random() * possible.length)); }
+  return text;
+};
+app.set('generateRandomString', generateRandomString);
+app.set('stateKey', 'spotify_auth_state');
+
+/**
+*
+* simpleAuth
+*
+**/
+var createJukeboxSession = function(req, res, jukebox) {
+  console.log('creating jukebox session');
+  var cleanJukebox = {
+    spotify_id:  jukebox.spotify_id,
+    name:        jukebox.name,
+    playlist_id:    jukebox.playlist_id
+  };
+
+  req.session.jukebox = cleanJukebox;
+  req.jukebox = cleanJukebox;
+  res.locals.jukebox = cleanJukebox;
+};
+
+var simpleAuth = function(req, res, next) {
+  if (req.session && req.session.jukebox) {
+    Jukebox.findOne({ spotify_id: req.session.jukebox.spotify_id }, function(err, jukebox) {
+      if (jukebox) {
+        createJukeboxSession(req, res, jukebox);
+      }
+      next();
+    });
+  } else {
+    next();
+  }
+};
+
+var requireLogin = function(req, res, next) {
+  if (!req.jukebox) {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+};
+
+app.set('createJukeboxSession', createJukeboxSession);
+
+/**
+*
 * App Configuration
 *
 **/
@@ -58,6 +115,14 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+  cookieName: 'session',
+  secret: 'keyboard cat',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000
+}));
+app.use(csrf());
+app.use(simpleAuth);
 
 /**
  * Connect to MongoDB.
@@ -75,18 +140,6 @@ mongoose.connect(uristring, function (err, res) {
   }
 });
 
-/**
-*
-* Spotify Auth Code
-*
-**/
-var generateRandomString = function(length) {
-  var text = '', possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for (var i = 0; i < length; i++) { text += possible.charAt(Math.floor(Math.random() * possible.length)); }
-  return text;
-};
-app.set('generateRandomString', generateRandomString);
-app.set('stateKey', 'spotify_auth_state');
 
 /**
 *
@@ -102,6 +155,7 @@ app.get('/jukebox/create', jukeboxController.create);
 app.get('/jukebox/name', jukeboxController.getName);
 app.post('/jukebox/name', jukeboxController.postName);
 app.get('/jukebox/:name', jukeboxController.view);
+app.get('/jukebox/:name/admin', requireLogin, jukeboxController.admin);
 app.get('/blockchain', blockchainController.index);
 
 // ideally this is what gets called when a payment is just made from wallet or scanned
@@ -117,9 +171,9 @@ io.on('connection', function (socket){
 
   socket.on('queue_request', function(jukebox_name){
     jukebox_name = jukebox_name.jukebox_name;
-    console.log(jukebox_name + ' queue_request');
+    console.log('jukebox:' + jukebox_name + ' queue_request');
     Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
-      console.log(jukebox);
+      // console.log(jukebox);
       if (err) console.log(err);
       if (jukebox){
         var tracks_uri = jukebox.playlist + '/tracks/';

@@ -6,7 +6,8 @@ var jukeboxSchema = new mongoose.Schema({
   token: String,
   refresh_token: String,
   name: String,
-  playlist: String
+  playlist: String,
+  playlist_id: String
 });
 
 module.exports = mongoose.model('Jukebox', jukeboxSchema);
