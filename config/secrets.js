@@ -1,8 +1,8 @@
-var uri = 'http://6bffd84f.ngrok.com';
+var uri = 'http://720c82f0.ngrok.com';
 
 module.exports = {
-	client_id: '4450314dba184de29b310f50fcf39f0b',
-	client_secret: '13bcd66e7dd24669b27a3d0fe0161760',
+	client_id: '7e5496e1bd3343528e4c000daf7e1cc5',
+	client_secret: 'e7e6076692234c139f7c5bf4c49a33fa',
 	uri: uri,
 	redirect_uri: uri + '/callback/',
 	blockchain_redirect_uri: uri + '/blockchain',
