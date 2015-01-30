@@ -1,11 +1,29 @@
 extends layout
 
 block content
-      h1 BitTunes
-      h2 
-        a(href="/jukebox/create") Create a Jukebox
-      h2 Join a Jukebox
-      ul
-          each name in jukebox_names
-              li
-                a(href="jukebox/" + name)= name
+      .container
+        .row
+          .col-xs-12
+            h2 Welcome to
+        .row
+          .col-xs-12
+            h1 BitTunes
+        .row(style="margin-top: 20px;")
+          .col-xs-12
+            h4 pay | play | donate
+      .container(style="margin-bottom: 20px;")
+      .container
+        .row
+          .col-xs-12
+            h3
+              a(href="/jukebox/create") Create a Jukebox
+        .row
+          .col-xs-12
+            h3 Join a Jukebox
+        .row
+          .col-xs-12
+            h4
+              ul(style="margin: 0; padding: 0; list-style-type: none; text-align: center;")
+                each name in jukebox_names
+                  li
+                    a(href="jukebox/" + name)= name
