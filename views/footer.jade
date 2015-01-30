@@ -14,8 +14,8 @@ footer
     script(type='text/javascript', src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js')
 
     script(type='text/javascript').
-      // $(document).ready(function() {
-      //     var t = new Trianglify();
-      //     var pattern = t.generate($(window).width(), $(window).height());
-      //     document.body.setAttribute('style', 'background-image: ' + pattern.dataUrl);
-      // });
+      $(document).ready(function() {
+      var t = new Trianglify({cellsize: 180, cellpadding: 5, noiseIntensity: 0.3,
+      fillOpacity: 0.4, strokeOpacity: 0.0});
+      var pattern = t.generate($(window).width(), $(window).height());
+      document.body.setAttribute('style', 'background-image: ' + pattern.dataUrl);});
