@@ -30,7 +30,12 @@ exports.postName = function(req, res) {
       jukebox.save(function(err) {
         if (err) return next(err);
         // create spotify playlist of same name & redirect
-        spotify.createPlaylist(jukebox_name, jukebox, res);
+        var args = {
+          jukebox_name: jukebox_name,
+          jukebox: jukebox,
+          res: res
+        };
+        spotify.createPlaylist(args);
       });
     } else {
       res.redirect('/');

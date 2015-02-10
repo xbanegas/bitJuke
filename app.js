@@ -89,6 +89,8 @@ var simpleAuth = function(req, res, next) {
 };
 
 var requireLogin = function(req, res, next) {
+  console.log('requireLogin fired');
+  console.log(req.jukebox);
   if (!req.jukebox) {
     res.redirect('/login');
   } else {
@@ -177,7 +179,13 @@ io.on('connection', function (socket){
       if (err) console.log(err);
       if (jukebox){
         var tracks_uri = jukebox.playlist + '/tracks/';
-        spotify.getTracks(tracks_uri, jukebox, io, socket_id);
+        var get_tracks_args = {
+          tracks_uri: tracks_uri, 
+          jukebox: jukebox, 
+          io: io,
+          socket_id: socket_id
+        };
+        spotify.getTracks(get_tracks_args);
       }
     });
   });
@@ -189,7 +197,13 @@ io.on('connection', function (socket){
     // Get spotify credentials using jukebox name
     Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
       if (err) return next(err);
-      if (jukebox) { spotify.search(search_term, jukebox, io, socket_id); }
+      var search_args = {
+        search_term: search_term,
+        jukebox: jukebox,
+        io: io,
+        socket_id: socket_id
+      };
+      if (jukebox) { spotify.search(search_args); }
     });
   });
 

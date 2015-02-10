@@ -24,7 +24,7 @@
         paymentTemplate = Handlebars.compile(paymentSource);
 
     // Request the queue on page load
-    socket.emit('queue_request', {jukebox_name: jukebox_name});
+    // socket.emit('queue_request', {jukebox_name: jukebox_name});
     socket.on('queue_response', function(tracks){
       console.log('queue_response fired');
       queue = tracks;

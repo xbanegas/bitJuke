@@ -1,4 +1,4 @@
-var uri = 'http://6bffd84f.ngrok.com';
+var uri = 'http://650fb608.ngrok.com/';
 
 module.exports = {
 	client_id: '4450314dba184de29b310f50fcf39f0b',

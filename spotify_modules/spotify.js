@@ -2,25 +2,30 @@ var request = require('request');
 var Jukebox = require('../models/Jukebox');
 var secrets = require('../config/secrets');
 
-// spotifySearch
-// refreshToken
-// spotifyGetTracks
-
-module.exports.search = search;
+module.exports.createPlaylist = createPlaylist;
 module.exports.refreshToken = refreshToken;
 module.exports.getTracks = getTracks;
+module.exports.search = search;
 module.exports.addTrack = addTrack;
-module.exports.createPlaylist = createPlaylist;
 
-function search(search_term, jukebox, io, socket_id) {
-  var spotify_id = jukebox.spotify_id;
-  var access_token = jukebox.token;
-  var refresh_token = jukebox.refresh_token;
+function search(args) {
+  // use original request terms or after token refresh
+  var search_term = args['search_term'],
+    io = args['io'],
+    socket_id = args['socket_id'];
+
+  var jukebox = args['jukebox'];
+  var spotify_id = jukebox.spotify_id,
+    access_token = jukebox.token,
+    refresh_token = jukebox.refresh_token;
+
   var search_options = {
     url: 'https://api.spotify.com/v1/search?q=' + search_term + '&type=album,track,artist',
     headers: { 'Authorization': 'Bearer ' + access_token },
     method: 'GET'
   };
+
+  // make the request
   request(search_options, searchCallback);
 
   function searchCallback(error, response, body) {
@@ -29,15 +34,19 @@ function search(search_term, jukebox, io, socket_id) {
       console.log('search success');
       var search_results = JSON.parse(body);
       io.to(socket_id).emit('search_result', search_results);
-      // If token expired refresh it
-    } else if (response.statusCode === 401) {
+    } else {
       console.log('token expired');
-      refreshToken(jukebox, refresh_token);
-    } else { console.log('search fail'); }
+      refreshToken(search, args);
+    // } else { console.log('search fail'); }
+    }
   }
 }
 
-function getTracks(tracks_uri, jukebox, io, socket_id) {
+function getTracks(args) {
+  var tracks_uri = args['tracks_uri'];
+  var io = args['io'];
+  var socket_id = args['socket_id'];
+  var jukebox = args['jukebox'];
   var spotify_id = jukebox.spotify_id;
   var access_token = jukebox.token;
   var refresh_token = jukebox.refresh_token;
@@ -47,6 +56,8 @@ function getTracks(tracks_uri, jukebox, io, socket_id) {
     json: true,
     method: 'GET',
   };
+
+  // make the request
   request(search_options, tracksCallback);
 
   function tracksCallback(error, response, body) {
@@ -59,24 +70,27 @@ function getTracks(tracks_uri, jukebox, io, socket_id) {
     // ELSE IF token expired refresh it
     } else if (response.statusCode === 401 || response.statusCode === 400) {
       console.log('token expired');
-      refreshToken(jukebox, refresh_token, getTracks);
+      refreshToken(getTracks, args);
     } else { console.log('tracks retrieval fail'); }
   }
 }
 
-function addTrack(track_id, jukebox, io) {
+function addTrack(args) {
+  var track_id = args['tracks_id'];
+  var jukebox = args['jukebox'];
+  var io = args['io'];
   var spotify_id = jukebox.spotify_id;
   var playlist_uri = jukebox.playlist;
   var access_token = jukebox.token;
   var refresh_token = jukebox.refresh_token;
   var jukebox_name = jukebox.name;
-  console.log(jukebox);
   var options = {
     url: playlist_uri + '/tracks?uris=spotify:track:' + track_id,
     headers: { 'Authorization': 'Bearer ' + access_token },
     json: true,
     method: 'POST'
   };
+
   request(options, addTrackCallback);
 
   function addTrackCallback(error, response, body) {
@@ -90,12 +104,15 @@ function addTrack(track_id, jukebox, io) {
     } else if (response.statusCode === 401 || response.statusCode === 400 || response.statusCode === 403) {
       console.log('token expired');
       // @TODO allow for refresh token 
-      // refreshToken(jukebox, refresh_token);
+      refreshToken(addTrack, args);
     } else { console.log('add track fail'); console.log(body); }
   }
 }
 
-function createPlaylist(playlist_name, jukebox, res) {
+function createPlaylist(args) {
+  var playlist_name = args['playlist_name'];
+  var jukebox = args['jukebox'];
+  var res = args['res'];
   var spotify_id = jukebox.spotify_id;
   var access_token = jukebox.token;
   var refresh_token = jukebox.refresh_token;
@@ -106,6 +123,7 @@ function createPlaylist(playlist_name, jukebox, res) {
     method: 'POST',
     body: {name: playlist_name, public: true}
   };
+
   request(search_options, playlistCallback);
 
   function playlistCallback(error, response, body) {
@@ -122,24 +140,29 @@ function createPlaylist(playlist_name, jukebox, res) {
     // ELSE IF token expired refresh it
     } else if (response.statusCode === 401 || response.statusCode === 400) {
       console.log('token expired');
-      refreshToken(jukebox, refresh_token, createPlaylist);
+      refreshToken(createPlaylist, args);
     } else { console.log('search fail'); }
   }
 }
 
 // @TODO third param repeat callback
-function refreshToken(jukebox, refresh_token) {
+function refreshToken(callback, args) {
+  jukebox = args['jukebox'];
+  refresh_token = jukebox.refresh_token;
+
   var refresh_uri = secrets.uri + '/refresh_token?refresh_token=' + refresh_token;
   request(refresh_uri, function(error, response, body){
     if (!error && response.statusCode === 200) {
       console.log('token refreshed');
       var new_token = JSON.parse(body).access_token;
-      console.log(new_token);
       jukebox.token = new_token;
       jukebox.save(function(error){
         if (error) return next(error);
         console.log('new token saved');
+        callback(args);
       });
+    } else {
+      console.log('refresh failed');
     }
   });
 }

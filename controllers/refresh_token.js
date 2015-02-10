@@ -27,7 +27,7 @@ module.exports.index = function(req, res){
       res.send({ access_token: access_token });
     } else {
       console.log('token refresh fail');
-      console.log('body');
+      console.log(body);
     }
   });
 };

@@ -17,9 +17,18 @@ module.exports.index = function(req, res) {
 
   Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
     if (err) next(err);
-    if (jukebox) { spotify.addTrack(song_uri, jukebox, io); }
+    if (jukebox) { 
+      var args = {
+        song_uri: song_uri,
+        jukebox: jukebox,
+        io: io
+      };
+      spotify.addTrack(args); 
+    }
   });
+
   res.send('*ok*');
+
   function addZero(i) { if (i < 10) { i = "0" + i; } return i; }
   function getDate() {
       var d = new Date();
