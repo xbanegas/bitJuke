@@ -1,4 +1,4 @@
-var uri = process.env.uri || 'http://localhost:8888';
+var uri = process.env.uri || 'http://localhost:5000';
 
 module.exports = {
 	client_id: process.env.client_id,

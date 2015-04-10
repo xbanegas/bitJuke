@@ -169,7 +169,7 @@ function refreshToken(callback, args) {
       });
     } else {
       console.log('::::: refresh failed');
-      // console.log(response);
+      console.log(error);
     }
   });
 }

@@ -18,9 +18,11 @@ module.exports.index = function(req, res){
     json: true,
     method: 'POST'
   };
+
+  console.log(client_secret+ ' ' + client_id);
+  console.log('::::: requesting token');
   console.log(authOptions);
   request(authOptions, function(error, response, body) {
-    console.log('requesting token');
     if (!error && response.statusCode === 200) {
       console.log('token response: ');
       console.log(body);

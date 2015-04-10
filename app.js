@@ -105,6 +105,7 @@ app.set('createJukeboxSession', createJukeboxSession);
 * App Configuration
 *
 **/
+app.set('port', (process.env.PORT || 8888));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -256,5 +257,5 @@ io.on('connection', function (socket){
 
 }); // end io
 
-console.log('Listening on 8888');
-server.listen(8888);
+console.log('Listening on ' + app.get('port'));
+server.listen(app.get('port'));
