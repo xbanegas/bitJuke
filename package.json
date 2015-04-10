@@ -1,7 +1,7 @@
 {
   "name": "bitjuke",
   "version": "1.0.0",
-  "engines" : {
+  "engines": {
     "node": "0.10.x"
   },
   "description": "",
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/xbanegas/bitJuke",
   "dependencies": {
+    "body-parser": "^1.12.2",
     "client-session": "^0.1.7",
     "client-sessions": "^0.7.0",
     "connect-assets": "^4.3.3",
