@@ -105,7 +105,8 @@ app.set('createJukeboxSession', createJukeboxSession);
 * App Configuration
 *
 **/
-app.set('port', (process.env.PORT || 8888));
+console.log(process.env.PORT);
+app.set('port', process.env.PORT || 5000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
