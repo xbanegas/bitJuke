@@ -148,7 +148,6 @@ mongoose.connect(uristring, function (err, res) {
 * Routes
 *
 **/
-// @TODO put all spotify callbacks in one controller
 app.get('/', homeController.index);
 app.get('/login', loginController.index);
 app.get('/callback', callbackController.index);
@@ -175,7 +174,6 @@ io.on('connection', function (socket){
     jukebox_name = jukebox_name.jukebox_name;
     console.log('jukebox:' + jukebox_name + ' queue_request');
     Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
-      // console.log(jukebox);
       if (err) console.log(err);
       if (jukebox){
         var tracks_uri = jukebox.playlist + '/tracks/';
@@ -191,19 +189,24 @@ io.on('connection', function (socket){
   });
 
   socket.on('search_request', function(search_data) {
-    console.log('search_request');
+    console.log(search_data);
     var jukebox_name = search_data.jukebox_name;
     var search_term = search_data.search_term;
+    console.log(jukebox_name + ' ' + search_term);
     // Get spotify credentials using jukebox name
-    Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
-      if (err) return next(err);
-      var search_args = {
-        search_term: search_term,
-        jukebox: jukebox,
-        io: io,
-        socket_id: socket_id
-      };
-      if (jukebox) { spotify.search(search_args); }
+    Jukebox.findOne({name: jukebox_name}, function(err, jukebox) {
+      console.log(jukebox);
+      console.log(err);
+      if (err) { console.log(err); return next(err); }
+      if (jukebox) { 
+        var search_args = {
+          search_term: search_term,
+          jukebox: jukebox,
+          io: io,
+          socket_id: socket_id
+        };   
+        spotify.search(search_args);
+      }
     });
   });
 
@@ -229,7 +232,10 @@ io.on('connection', function (socket){
         blockchain_response = JSON.parse(blockchain_response);
         // console.log(blockchain_response);
       });
-      res.on('error', function(error) { console.log(error); });
+      res.on('error', function(error) { 
+        console.log('::::: blockchain_response error')
+        console.log(error); 
+      });
     }).end();
   });
 

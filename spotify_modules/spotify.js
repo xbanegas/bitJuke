@@ -9,6 +9,7 @@ module.exports.search = search;
 module.exports.addTrack = addTrack;
 
 function search(args) {
+
   // use original request terms or after token refresh
   var search_term = args['search_term'],
     io = args['io'],
@@ -25,6 +26,10 @@ function search(args) {
     method: 'GET'
   };
 
+  console.log('access_token: ' + access_token);
+  console.log(search_options);
+
+
   // make the request
   request(search_options, searchCallback);
 
@@ -35,9 +40,10 @@ function search(args) {
       var search_results = JSON.parse(body);
       io.to(socket_id).emit('search_result', search_results);
     } else {
-      console.log('token expired');
-      refreshToken(search, args);
-    // } else { console.log('search fail'); }
+      console.log('token error during search');
+      // console.log('token error response:');
+      // console.log(response);
+      refreshToken(search, args); 
     }
   }
 }
@@ -103,7 +109,6 @@ function addTrack(args) {
     // ELSE IF token expired refresh it
     } else if (response.statusCode === 401 || response.statusCode === 400 || response.statusCode === 403) {
       console.log('token expired');
-      // @TODO allow for refresh token 
       refreshToken(addTrack, args);
     } else { console.log('add track fail'); console.log(body); }
   }
@@ -145,24 +150,26 @@ function createPlaylist(args) {
   }
 }
 
-// @TODO third param repeat callback
-function refreshToken(callback, args) {
-  jukebox = args['jukebox'];
-  refresh_token = jukebox.refresh_token;
 
+function refreshToken(callback, args) {
+  console.log('::::: refreshing token')
+  var jukebox = args['jukebox'];
+  var refresh_token = jukebox.refresh_token;
   var refresh_uri = secrets.uri + '/refresh_token?refresh_token=' + refresh_token;
+
   request(refresh_uri, function(error, response, body){
     if (!error && response.statusCode === 200) {
-      console.log('token refreshed');
+      console.log('::::: token refreshed');
       var new_token = JSON.parse(body).access_token;
       jukebox.token = new_token;
       jukebox.save(function(error){
         if (error) return next(error);
-        console.log('new token saved');
+        console.log('::::: new token saved');
         callback(args);
       });
     } else {
-      console.log('refresh failed');
+      console.log('::::: refresh failed');
+      // console.log(response);
     }
   });
 }

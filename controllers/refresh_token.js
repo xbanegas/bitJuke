@@ -8,8 +8,9 @@ module.exports.index = function(req, res){
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    // @TODO implement this safety measure more?
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    headers: { 
+      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+    },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -17,7 +18,7 @@ module.exports.index = function(req, res){
     json: true,
     method: 'POST'
   };
-
+  console.log(authOptions);
   request(authOptions, function(error, response, body) {
     console.log('requesting token');
     if (!error && response.statusCode === 200) {
@@ -26,8 +27,9 @@ module.exports.index = function(req, res){
       var access_token = body.access_token;
       res.send({ access_token: access_token });
     } else {
-      console.log('token refresh fail');
+      console.log('::::: token refresh fail');
       console.log(body);
+      // console.log(response);
     }
   });
 };
