@@ -222,7 +222,7 @@ io.on('connection', function (socket){
     console.log(options.host + options.path);
     // @TODO Can clean up this section by using request module
     var req = https.get(options, function(res) {
-      console.log('new address request');
+      console.log('::::: new address request');
       console.log('statusCode: ', res.statusCode);
       // console.log("headers: ", res.headers);
       res.on('data', function (chunk) {

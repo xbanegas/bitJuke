@@ -1,8 +1,8 @@
-var uri = 'http://localhost:8888';
+var uri = process.env.uri || 'http://localhost:8888';
 
 module.exports = {
-	client_id: '4450314dba184de29b310f50fcf39f0b',
-	client_secret: '13bcd66e7dd24669b27a3d0fe0161760',
+	client_id: process.env.client_id,
+	client_secret: process.env.client_secret,
 	uri: uri,
 	redirect_uri: uri + '/callback/',
 	blockchain_redirect_uri: uri + '/blockchain',
