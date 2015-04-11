@@ -9,7 +9,6 @@ module.exports.search = search;
 module.exports.addTrack = addTrack;
 
 function search(args) {
-
   // use original request terms or after token refresh
   var search_term = args['search_term'],
     io = args['io'],
@@ -115,7 +114,7 @@ function addTrack(args) {
 }
 
 function createPlaylist(args) {
-  var playlist_name = args['playlist_name'];
+  var playlist_name = args['jukebox_name'];
   var jukebox = args['jukebox'];
   var res = args['res'];
   var spotify_id = jukebox.spotify_id;
@@ -132,7 +131,7 @@ function createPlaylist(args) {
   request(search_options, playlistCallback);
 
   function playlistCallback(error, response, body) {
-    console.log('making playlist creation POST');
+    console.log('::::: making playlist creation POST');
     if (!error && response.statusCode === 200 || response.statusCode === 201) {
       console.log('playlist creation success');
       var playlist_response = body;
@@ -143,10 +142,12 @@ function createPlaylist(args) {
         res.redirect('/jukebox/' + jukebox.name + '/admin');
       });
     // ELSE IF token expired refresh it
-    } else if (response.statusCode === 401 || response.statusCode === 400) {
-      console.log('token expired');
-      refreshToken(createPlaylist, args);
-    } else { console.log('search fail'); }
+    } 
+    // else if (response.statusCode === 401 || response.statusCode === 400) {
+    //   console.log('token expired');
+    //   refreshToken(createPlaylist, args);
+    // } 
+    else { console.log(response); }
   }
 }
 

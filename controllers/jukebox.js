@@ -26,6 +26,7 @@ exports.postName = function(req, res) {
   // IF jukebox exists, name it
   Jukebox.findOne({ spotify_id: spotify_id }, function(err, jukebox) {
     if (jukebox && jukebox_name != 'name') {
+      // @TODO better validation
       jukebox.name = jukebox_name || '';
       jukebox.save(function(err) {
         if (err) return next(err);
