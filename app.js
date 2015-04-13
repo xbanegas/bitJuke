@@ -43,6 +43,7 @@ var jukeboxController = require('./controllers/jukebox');
 var loginController = require('./controllers/login');
 var refreshController = require('./controllers/refresh_token');
 var blockchainController = require('./controllers/blockchain');
+var adminController = require('./controllers/admin');
 
 /**
 *
@@ -161,6 +162,7 @@ app.get('/jukebox/:name', jukeboxController.view);
 app.get('/jukebox/:name/admin', requireLogin, jukeboxController.admin);
 app.get('/jukebox/:name/delete', requireLogin, jukeboxController.delete);
 app.get('/blockchain', blockchainController.index);
+app.get('/admin', requireLogin, adminController.index);
 
 // ideally this is what gets called when a payment is just made from wallet or scanned
 // should take user back to jukebox queue

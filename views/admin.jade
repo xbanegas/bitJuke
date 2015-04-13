@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 BitTunes
+  h2 
+    a(href="/jukebox/create") Create a Jukebox
+  h2 Jukeboxes
+  ul
+    each name in jukebox_names
+      li
+        a(href="jukebox/" + name)= name
+        | 
+        a(href="jukebox/" + name + "/delete")= "delete"
