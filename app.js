@@ -159,6 +159,7 @@ app.get('/jukebox/name', jukeboxController.getName);
 app.post('/jukebox/name', jukeboxController.postName);
 app.get('/jukebox/:name', jukeboxController.view);
 app.get('/jukebox/:name/admin', requireLogin, jukeboxController.admin);
+app.get('/jukebox/:name/delete', requireLogin, jukeboxController.delete);
 app.get('/blockchain', blockchainController.index);
 
 // ideally this is what gets called when a payment is just made from wallet or scanned

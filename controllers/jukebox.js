@@ -58,3 +58,7 @@ exports.admin = function(req, res) {
     spotify_id: req.session.jukebox.spotify_id
   });
 };
+
+exports.delete = function(req, res){
+  console.log('deleting jukebox');
+};
