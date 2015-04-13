@@ -93,7 +93,7 @@ var requireLogin = function(req, res, next) {
   console.log('requireLogin fired');
   console.log(req.jukebox);
   if (!req.jukebox) {
-    res.redirect('/login');
+    res.redirect('/');
   } else {
     next();
   }

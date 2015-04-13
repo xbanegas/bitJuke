@@ -61,10 +61,8 @@ exports.admin = function(req, res) {
 
 exports.delete = function(req, res){
   var jukebox_name = req.params.name;
-  console.log(jukebox_name);
-
   Jukebox.findOne({name: jukebox_name}).remove(function(err){
-    console.log('deleting jukebox');
     !err ? console.log('jukebox deleted') : console.log(err);
   });
+  res.redirect('/admin');
 };
