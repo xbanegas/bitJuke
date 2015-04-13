@@ -5,19 +5,20 @@ var Jukebox = require('../models/Jukebox');
 module.exports.index = function(req, res) {
   'use strict';
   // @TODO verify req is from blockchain.info
-  console.log('response from blockchain received');
-  console.log(getDate());
-  console.log(req.query.song_uri);
-
   var io = res.app.get('io');
   var song_uri = req.query.song_uri;
-  var jukebox_name = req.query.jukebox_name;
+  var jukebox_name = req.query.jukebox;
 
+  console.log('::::: response from blockchain received at ' + getDate() + ' for song_uri ' + req.query.song_uri + ':');
   console.log(req.query);
 
   Jukebox.findOne({name: jukebox_name}, function(err, jukebox){
+    console.log(err);
+    console.log(jukebox);
+
     if (err) next(err);
     if (jukebox) { 
+      console.log('firing spotify addTrack from blockchain');
       var args = {
         song_uri: song_uri,
         jukebox: jukebox,
@@ -25,9 +26,9 @@ module.exports.index = function(req, res) {
       };
       spotify.addTrack(args); 
     }
+    res.send('*ok*');
   });
 
-  res.send('*ok*');
 
   function addZero(i) { if (i < 10) { i = "0" + i; } return i; }
   function getDate() {

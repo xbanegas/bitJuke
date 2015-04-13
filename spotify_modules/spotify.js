@@ -81,7 +81,8 @@ function getTracks(args) {
 }
 
 function addTrack(args) {
-  var track_id = args['tracks_id'];
+  console.log('::::: spotify add track fired')
+  var track_id = args['song_uri'];
   var jukebox = args['jukebox'];
   var io = args['io'];
   var spotify_id = jukebox.spotify_id;
@@ -99,7 +100,7 @@ function addTrack(args) {
   request(options, addTrackCallback);
 
   function addTrackCallback(error, response, body) {
-    console.log('adding tracks POST');
+    console.log('::::: adding tracks POST');
     // console.log(body);  
     if (!error && response.statusCode === 200 || response.statusCode === 201) {
       console.log('tracks POST success');
@@ -107,7 +108,8 @@ function addTrack(args) {
       io.emit('song_added', {jukebox_name: jukebox_name});
     // ELSE IF token expired refresh it
     } else if (response.statusCode === 401 || response.statusCode === 400 || response.statusCode === 403) {
-      console.log('token expired');
+      // console.log('token expired');
+      console.log(response);
       refreshToken(addTrack, args);
     } else { console.log('add track fail'); console.log(body); }
   }
